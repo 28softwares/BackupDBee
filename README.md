@@ -13,4 +13,4 @@
 
 ### running this shell scipting in certain interval
 
-sh ./index.sh nabinsaud2059@gmail.com lwtewkjxhxqhyhji sovitthapa008@gmail.com
+sh ./index.sh username password mailto
