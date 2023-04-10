@@ -8,6 +8,8 @@ const backupHelper = (
   data: DataBaseList,
   BASE_DIR: string
 ): Promise<string> => {
+  !existsSync(resolve(BASE_DIR, 'backups')) &&
+    mkdirSync(resolve(BASE_DIR, 'backups'));
   !existsSync(resolve(BASE_DIR, 'backups', data.database)) &&
     mkdirSync(resolve(BASE_DIR, 'backups', data.database));
   let backupFolder = resolve(
