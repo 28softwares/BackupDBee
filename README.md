@@ -4,3 +4,13 @@
 2. Put the smtp credentials and mail where backup file is sent in src/utils/mailer.utils.ts
 3. Simply run the cron jobs at which interval you want backup
 4. simply run the script npm run start nto take backup
+
+### shell scripting
+
+1. First arguments contains the smtp username
+2. second arguments contains password of smtp transporter
+3. third arguments contains the gmail where mail is to be sent
+
+### running this shell scipting in certain interval
+
+sh ./index.sh nabinsaud2059@gmail.com lwtewkjxhxqhyhji sovitthapa008@gmail.com
