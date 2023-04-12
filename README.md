@@ -5,6 +5,8 @@
 3. Simply run the cron jobs at which interval you want backup
 4. simply run the script npm run start nto take backup
 
+###### data.json inside constants constants data for database lists
+
 ### shell scripting
 
 1. First arguments contains the smtp username

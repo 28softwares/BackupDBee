@@ -1,13 +1,10 @@
-import { DataBaseList } from '../constants/interface';
 import { createWriteStream, existsSync, mkdirSync, rmSync } from 'fs';
 import { spawn, spawnSync } from 'child_process';
 import Print from '../constants/Print';
 import { resolve } from 'path';
+import DataBase from './DatabaseLits';
 
-const backupHelper = (
-  data: DataBaseList,
-  BASE_DIR: string
-): Promise<string> => {
+const backupHelper = (data: DataBase, BASE_DIR: string): Promise<string> => {
   !existsSync(resolve(BASE_DIR, 'backups')) &&
     mkdirSync(resolve(BASE_DIR, 'backups'));
   !existsSync(resolve(BASE_DIR, 'backups', data.database)) &&
