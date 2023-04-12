@@ -5,7 +5,7 @@
 3. Simply run the cron jobs at which interval you want backup
 4. simply run the script npm run start nto take backup
 
-###### data.json inside constants constants data for database lists
+###### data.json inside src/constants/data.json  for database lists
 
 ### shell scripting
 
