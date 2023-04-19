@@ -6,7 +6,7 @@ import Database from "./utils/DatabaseLits";
 import Print from "./constants/Print";
 import path from "path";
 
-const BASE_DIR = resolve(__dirname, "..", "src");
+const BASE_DIR = resolve(__dirname, "..", "..", "src");
 
 main();
 
