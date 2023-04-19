@@ -1,1 +1,2 @@
-npm  run  start $1 $2 $3
+npm  run start 
+# $1 = location of database config file.
