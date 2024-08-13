@@ -28,7 +28,7 @@ dayOfWeek can be 0 to 7. 0 and 7 means Sunday, 1 means Monday, 2 means Tuesday a
 
 ```bash
 
-\* \* \* \* _ commandToRun {_ can be any value}
+* * * * * commandToRun {_ can be any value}
 
 ```
 
