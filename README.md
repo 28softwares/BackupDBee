@@ -1,10 +1,38 @@
+####Clone the project :
+
+```
+git clone https://github.com/28softwares/autobackup-db-and-email .
+cd autobackup-db-and-email
+```
+
+#### Intially supply configuration to src/config.db.json as
+
+```json
+[
+  // supply one or multiple configurations.
+  {
+    "user": "root", // database user name
+    "password": "iamsohappy", //database password
+    "database": "database1", //database name
+    "type": "postgres" // database type; optional for mysql.
+  },
+  {
+    "user": "root",
+    "password": "iamsohappy",
+    "database": "database2",
+    "type": "postgres"
+  }
+]
+```
+
+##### and save it.
+
 Make sure to install nodejs and zip in the linux server.
 
 ```bash
 
     sudo apt-get install zip && npm i
     chmod +x index.sh # adding executable mode to the file.
-
     #To test the file Run the following command.
     ./index.sh
 ```
@@ -13,23 +41,11 @@ Set the cronjob.
 
 ```bash
     crontab -e
-```
 
-Syntax for cronjob :
-minute hour dayOfMonth month dayOfWeek commandToRun
+    #at the crontab file, add the following script.
 
-minute can be 0 to 59.
-hour can also be 0 to 59.
-dayOfMonth can be 1 to 31.
-month can be 1 to 12.
-dayOfWeek can be 0 to 7. 0 and 7 means Sunday, 1 means Monday, 2 means Tuesday and so on.
-
-'Command to run'
-
-```bash
-
+    #minute hour dayOfMonth month dayOfWeek commandToRun
 * * * * * commandToRun {_ can be any value}
-
 ```
 
 OR, you can use process managers as
