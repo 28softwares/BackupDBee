@@ -1,19 +1,19 @@
 Make sure to install nodejs and zip in the linux server.
-`bash
+
+```bash
 
     sudo apt-get install zip && npm i
+    chmod +x index.sh # adding executable mode to the file.
 
-`
-
-`chmod +x index.sh` // adding executable mode to the file.
-
-To test the file Run the following command.
-`./index.sh` // run the file
+    #To test the file Run the following command.
+    ./index.sh
+```
 
 Set the cronjob.
-`crontab -e
 
-`
+```bash
+    crontab -e
+```
 
 Syntax for cronjob :
 minute hour dayOfMonth month dayOfWeek commandToRun
@@ -26,12 +26,18 @@ dayOfWeek can be 0 to 7. 0 and 7 means Sunday, 1 means Monday, 2 means Tuesday a
 
 'Command to run'
 
-`bash
-//\* \* \* \* _ commandToRun {_ can be any value}
-//1 \* \* \* \* ./index.sh {runs index.sh every 1 minute}
+```bash
 
-`
+\* \* \* \* _ commandToRun {_ can be any value}
 
-# Todo
+```
+
+OR, you can use process managers as
+
+```
+pm2 start src/index.js --name dbbackup --cron "* * * * *"
+```
+
+### Todo
 
 1. Delete the locally saved backup files after sending mail

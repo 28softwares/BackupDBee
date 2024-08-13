@@ -9,10 +9,12 @@ const backupHelper = (data: DataBase, BASE_DIR: string): Promise<string> => {
     mkdirSync(resolve(BASE_DIR, "backups"));
   !existsSync(resolve(BASE_DIR, "backups", data.database)) &&
     mkdirSync(resolve(BASE_DIR, "backups", data.database));
+
   let backupFolder = resolve(
     BASE_DIR,
     `backups/${data.database}/${Math.round(Date.now() / 1000)}.backup.zip`
   );
+
   let dumpFileName = `${Math.round(Date.now() / 1000)}-${
     data.database
   }.dump.sql`;
