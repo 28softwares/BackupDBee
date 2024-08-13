@@ -22,7 +22,7 @@ function main() {
       try {
         let data = await backupHelper(databaseLists[i], BASE_DIR);
 
-        sendMail(data);
+        sendMail(data, databaseLists[i].database);
       } catch (error) {
         Print.error("error in backup database");
       }

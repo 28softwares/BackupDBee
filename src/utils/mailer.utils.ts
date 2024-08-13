@@ -14,12 +14,12 @@ const transporter = createTransport({
   },
 });
 
-export const sendMail = async (filePath: string) => {
+export const sendMail = async (filePath: string, dbName: string) => {
   return await transporter.sendMail({
     from: process.env.MAIL_USER,
     to: process.env.MAIL_USER,
     html: "<h1>Date : " + new Date() + "</h1>",
-    subject: "Backup file of database",
+    subject: `Backup file of '${dbName}' database`,
     attachments: [{ path: filePath }],
   });
 };
