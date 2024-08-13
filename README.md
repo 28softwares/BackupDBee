@@ -31,3 +31,7 @@ dayOfWeek can be 0 to 7. 0 and 7 means Sunday, 1 means Monday, 2 means Tuesday a
 //1 \* \* \* \* ./index.sh {runs index.sh every 1 minute}
 
 `
+
+# Todo
+
+1. Delete the locally saved backup files after sending mail

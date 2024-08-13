@@ -19,12 +19,22 @@ const backupHelper = (data: DataBase, BASE_DIR: string): Promise<string> => {
 
   const write = createWriteStream(dumpFileName);
 
-  const dump = spawn("mysqldump", [
-    "-u",
-    `${data.user}`,
-    `-p${data.password}`,
-    `${data.database}`,
-  ]);
+  let dump;
+  switch (data.type) {
+    case "mysql":
+      dump = spawn("mysqldump", [
+        "-u",
+        `${data.user}`,
+        `-p`,
+        `${data.password}`,
+        `${data.database}`,
+      ]);
+      break;
+    case "postgres":
+      dump = spawn("pg_dump", ["-U", data.user, "-d", data.database], {
+        env: { ...process.env, PGPASSWORD: data.password },
+      });
+  }
 
   return new Promise((success, reject) => {
     dump.stdout

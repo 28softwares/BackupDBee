@@ -1,3 +1,8 @@
 node_modules
 log 
 src/backups
+.sql
+pnpm-lock.yaml
+yarn.lock
+package-lock.json
+.env

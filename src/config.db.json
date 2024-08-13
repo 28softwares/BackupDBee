@@ -1,1 +1,14 @@
-[{ "user": "root", "password": "12345", "database": "wadakanoon" }]
+[
+  {
+    "user": "root",
+    "password": "iamsohappy",
+    "database": "investiaa",
+    "type": "postgres"
+  },
+  {
+    "user": "root",
+    "password": "iamsohappy",
+    "database": "payment_investiaa",
+    "type": "postgres"
+  }
+]

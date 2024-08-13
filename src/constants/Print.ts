@@ -1,4 +1,4 @@
-import { Logger } from './logger';
+import { Logger } from "./logger";
 
 class Print {
   static error(message: string) {
