@@ -1,3 +1,6 @@
+# autobackup-db-and-email
+
+
 ## Clone the project :
 
 ```
@@ -7,21 +10,20 @@ cd autobackup-db-and-email
 
 #### Initial Setup
 
-  const dbConfig:ConfigType[]   = [
-    {
-      host: process.env.HOST,
-      db_name: process.env.DB_NAME,
-      user: process.env.DB_USER,
-      password: process.env.DB_PASSWORD,
-      type: "postgres",
-      port: 5432, // Optional
-      ssl: false, //Optional
-    },
-    // ADD OTHER DATABASE CONFIGURATION HERE....
-  ];
-
-
-##### and save it.
+```
+const dbConfig:ConfigType[]   = [
+  {
+    host: process.env.HOST,
+    db_name: process.env.DB_NAME,
+    user: process.env.DB_USER,
+    password: process.env.DB_PASSWORD,
+    type: "postgres",
+    port: 5432, // Optional
+    ssl: false, //Optional
+  },
+  // ADD OTHER DATABASE CONFIGURATION HERE....
+];
+```
 
 Make sure to install nodejs and zip in the linux server.
 
