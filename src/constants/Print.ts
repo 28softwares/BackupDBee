@@ -13,6 +13,7 @@ class Print {
     Logger.warn(message);
   }
 
+  // eslint-disable-next-line @typescript-eslint/no-explicit-any
   static debug(message: any) {
     Logger.debug(message);
   }

@@ -1,29 +1,25 @@
-####Clone the project :
+## Clone the project :
 
 ```
 git clone https://github.com/28softwares/autobackup-db-and-email .
 cd autobackup-db-and-email
 ```
 
-#### Intially supply configuration to src/config.db.json as
+#### Initial Setup
 
-```json
-[
-  // supply one or multiple configurations.
-  {
-    "user": "root", // database user name
-    "password": "iamsohappy", //database password
-    "database": "database1", //database name
-    "type": "postgres" // database type; optional for mysql.
-  },
-  {
-    "user": "root",
-    "password": "iamsohappy",
-    "database": "database2",
-    "type": "postgres"
-  }
-]
-```
+  const dbConfig:ConfigType[]   = [
+    {
+      host: process.env.HOST,
+      db_name: process.env.DB_NAME,
+      user: process.env.DB_USER,
+      password: process.env.DB_PASSWORD,
+      type: "postgres",
+      port: 5432, // Optional
+      ssl: false, //Optional
+    },
+    // ADD OTHER DATABASE CONFIGURATION HERE....
+  ];
+
 
 ##### and save it.
 

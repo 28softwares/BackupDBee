@@ -1,32 +1,23 @@
-import { resolve } from "path";
-import { readFile } from "fs";
+/* eslint-disable @typescript-eslint/no-unused-expressions */
 import backupHelper from "./utils/backup.utils";
-import { sendMail } from "./utils/mailer.utils";
-import Database from "./utils/DatabaseLits";
 import Print from "./constants/Print";
-import path from "path";
+import dbConfig from "../config";
+import { exec } from "child_process";
+import { ConfigType } from "./types";
+import { promisify } from "util";
 
-const BASE_DIR = resolve(process.cwd(), "src");
+// Promisify exec to use with async/await
+export const execAsync = promisify(exec);
 
-main();
-
-function main() {
-  readFile(resolve(BASE_DIR, "config.db.json"), "utf-8", async (err, data) => {
-    if (err) {
-      Print.error("Error while reading Database Config.");
-      return;
+const main = async (configs: ConfigType[]) => {
+  for (const config of configs) {
+    try {
+      await backupHelper(config);
+    } catch (error) {
+      console.error("Backup failed", error);
+      Print.error("Backup failed.");
     }
-    let databaseLists = Database.plainToInstances(JSON.parse(data));
+  }
+};
 
-    for (let i = 0; i < databaseLists.length; i++) {
-      try {
-        let data = await backupHelper(databaseLists[i], BASE_DIR);
-
-        sendMail(data, databaseLists[i].database);
-      } catch (error) {
-        Print.error("error in backup database");
-      }
-    }
-    Print.info(`Database Backup Successfully ${new Date().toDateString()}`);
-  });
-}
+main(dbConfig);
