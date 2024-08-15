@@ -3,7 +3,7 @@ Effortlessly manage your database backups at one go. This easy-to-use tool suppo
 
 #### Key features include:
 
-- Multiple Database Support: Seamlessly back up MySQL, PostgreSQL, and other databases in one go. Note: For now we support MySQL and PostgreSQl. 
+- Multiple Database Support: Seamlessly back up MySQL & PostgreSQL in one go. Note: For now we support MySQL and PostgreSQl. 
 - Automated Backups: Schedule and automate backups to ensure your data is always protected without manual intervention.
 - Compression: Compress backups into zip files to save storage space and optimize transfer times.
 - Email Integration: Instantly send backup files directly to your inbox or designated recipients for easy access and archiving.
