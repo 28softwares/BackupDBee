@@ -1,13 +1,12 @@
 /* eslint-disable no-undef */
 import { createTransport } from "nodemailer";
-import dotenv from "dotenv";
-import path from "path";
+import "dotenv/config";
+import Print from "../constants/Print";
 
-dotenv.config({ path: path.join(__dirname, "../../.env") });
+
 const transporter = createTransport({
   host: "smtp.gmail.com",
-  port: 587,
-  secure: false,
+  secure: true,
   requireTLS: true,
   auth: {
     user: `${process.env.MAIL_USER}`,
@@ -15,12 +14,25 @@ const transporter = createTransport({
   },
 });
 
-export const sendMail = async (file: string) => {
+
+transporter.verify(function (error) {
+  if (error) {
+    console.log(error);
+    Print.error("Mail setup failed")
+  } else {
+    console.log("Sending backups...");
+  }
+});
+
+
+// eslint-disable-next-line @typescript-eslint/no-explicit-any
+export const sendMail = async (file: any) => {
   return await transporter.sendMail({
     from: process.env.MAIL_USER,
     to: process.env.MAIL_USER,
     html: "<h1>Date : " + new Date() + "</h1>",
     subject: `Backups`,
     attachments: [{ path: file }],
-  });
+  }
+);
 };

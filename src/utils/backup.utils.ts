@@ -4,6 +4,8 @@ import Print from "../constants/Print";
 import { resolve } from "path";
 import { ConfigType } from "../types";
 import { execAsync } from "..";
+import { sendMail } from "./mailer.utils";
+import 'dotenv/config'
 
 const ensureDirectory = (dirPath: string) => {
   if (!existsSync(dirPath)) {
@@ -87,6 +89,10 @@ const backupHelper = async (data: ConfigType) => {
       try {
         //compressing the backup file
         await execAsync(`zip -j ${dumpFilePath}.zip ${dumpFilePath}`);
+        // eslint-disable-next-line no-undef
+        if (data.mail_backup) {
+          sendMail(`${dumpFilePath}.zip`)
+        }
         //remove the uncompressed file
         rmSync(dumpFilePath);
         resolve(backupDir);

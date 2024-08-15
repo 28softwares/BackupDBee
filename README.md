@@ -9,7 +9,18 @@ cd autobackup-db-and-email
 ```
 
 #### Initial Setup
+Make sure to install nodejs and zip in the linux server.
 
+```bash
+    sudo apt-get install zip && npm i
+    chmod +x index.sh # adding executable mode to the file.
+    #To test the file Run the following command.
+    ./index.sh
+```
+
+
+#### Initial Setup
+Add your database configuration in 'config.ts'
 ```
 const dbConfig:ConfigType[]   = [
   {
@@ -18,22 +29,24 @@ const dbConfig:ConfigType[]   = [
     user: process.env.DB_USER,
     password: process.env.DB_PASSWORD,
     type: "postgres",
+    mail_backup: true  // In case you want to send backups to your email, {default:false}
+    // Other configuration (Optional)
     port: 5432, // Optional
     ssl: false, //Optional
   },
-  // ADD OTHER DATABASE CONFIGURATION HERE....
+  // ADD MULTIPLE DATABASE CONFIGURATION HERE....
 ];
 ```
 
-Make sure to install nodejs and zip in the linux server.
+To send backup through mail you need to add mail credentials to .env. 
+Note: You cannot pass your regular password if 2FA is enabled on your mail account. For this, You can create an app specific password from here [Google App Password]: https://myaccount.google.com/apppasswords.
 
-```bash
-
-    sudo apt-get install zip && npm i
-    chmod +x index.sh # adding executable mode to the file.
-    #To test the file Run the following command.
-    ./index.sh
 ```
+  MAIL_USER='example@gmail.com'
+  MAIL_PASSWORD='example password' 
+```
+
+
 
 Set the cronjob.
 
@@ -52,6 +65,5 @@ OR, you can use process managers as
 pm2 start src/index.js --name dbbackup --cron "* * * * *"
 ```
 
-### Todo
 
-1. Delete the locally saved backup files after sending mail
+## Feel Free To Contribute
