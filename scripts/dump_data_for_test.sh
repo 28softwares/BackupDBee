@@ -1,4 +1,5 @@
 #!/bin/bash
+# Scripts that dumps 10 rows from each table in a database.
 
 DB_NAME="location"
 DB_USER="root"
