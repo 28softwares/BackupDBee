@@ -4,7 +4,6 @@ import backupHelper from "./utils/backup.utils";
 import { sendMail } from "./utils/mailer.utils";
 import Database from "./utils/DatabaseLits";
 import Print from "./constants/Print";
-import path from "path";
 
 const BASE_DIR = resolve(process.cwd(), "src");
 
