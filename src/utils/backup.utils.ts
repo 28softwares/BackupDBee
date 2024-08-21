@@ -90,7 +90,7 @@ const backupHelper = async (data: ConfigType) => {
         //compressing the backup file
         await execAsync(`zip -j ${dumpFilePath}.zip ${dumpFilePath}`);
         // eslint-disable-next-line no-undef
-        if (data.mail_backup) {
+        if (data.mail_backup!=false) {
           sendMail(`${dumpFilePath}.zip`)
         }
         //remove the uncompressed file

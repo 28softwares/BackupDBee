@@ -8,7 +8,7 @@ const dbConfig: ConfigType[] = [
     db_name: process.env.POSTGRES_DB_NAME,
     user: process.env.POSTGRES_DB_USER,
     password: process.env.POSTGRES_DB_PASSWORD,
-    mail_backup: true,
+    mail_backup: false,
     type: "postgres",
   },
   {
@@ -16,9 +16,9 @@ const dbConfig: ConfigType[] = [
     db_name: process.env.MYSQL_DB_NAME,
     user: process.env.MYSQL_DB_USER,
     password: process.env.MYSQL_DB_PASSWORD,
-    mail_backup: true,
     type: "mysql", 
   },
+  // add multiple databases here
 ];
 
 export default dbConfig;

@@ -37,14 +37,24 @@ const dbConfig:ConfigType[]   = [
     user: process.env.DB_USER,
     password: process.env.DB_PASSWORD,
     type: "postgres",
-    mail_backup: true  // In case you want to send backups to your email, {default:false}
-    // Other configuration (Optional)
-    port: 5432, // Optional
-    ssl: false, //Optional
+  },
+  {
+    host: process.env.MYSQL_HOST,
+    db_name: process.env.MYSQL_DB_NAME,
+    user: process.env.MYSQL_DB_USER,
+    password: process.env.MYSQL_DB_PASSWORD,
+    type: "mysql", 
   },
   // ADD MULTIPLE DATABASE CONFIGURATION HERE....
 ];
 ```
+### Other Configuration (Optional)
+```
+    mail_backup: false  // {default:true}
+    port: 5432, 
+    ssl: false,
+```
+
 
 To send backup through mail you need to add mail credentials to .env. 
 Note: You cannot pass your regular password if 2FA is enabled on your mail account. For this, You can create an app specific password from here [Google App Password]: https://myaccount.google.com/apppasswords.
