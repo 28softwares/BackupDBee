@@ -1,6 +1,6 @@
 /* eslint-disable no-undef */
 import { createTransport } from "nodemailer";
-import "dotenv/config";
+import EnvConfig from "../constants/env.config";
 import Print from "../constants/Print";
 
 
@@ -9,8 +9,8 @@ const transporter = createTransport({
   secure: true,
   requireTLS: true,
   auth: {
-    user: `${process.env.MAIL_USER}`,
-    pass: `${process.env.MAIL_PASSWORD}`,
+    user: EnvConfig.MAIL_USER,
+    pass: EnvConfig.MAIL_PASSWORD,
   },
 });
 
@@ -28,8 +28,8 @@ transporter.verify(function (error) {
 // eslint-disable-next-line @typescript-eslint/no-explicit-any
 export const sendMail = async (file: any) => {
   return await transporter.sendMail({
-    from: process.env.MAIL_USER,
-    to: process.env.MAIL_USER,
+    from: EnvConfig.MAIL_USER,
+    to: EnvConfig.MAIL_USER,
     html: "<h1>Date : " + new Date() + "</h1>",
     subject: `Backups`,
     attachments: [{ path: file }],
