@@ -6,6 +6,7 @@ import { exec } from "child_process";
 import { ConfigType } from "./types";
 import { promisify } from "util";
 
+
 // Promisify exec to use with async/await
 export const execAsync = promisify(exec);
 

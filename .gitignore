@@ -9,6 +9,6 @@ package-lock.json
 .DS_Store
 config.db.json
 backups/
-/backups
 .zip
 .vscode/
+limited_dump.sql
