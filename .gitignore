@@ -1,0 +1,13 @@
+node_modules
+log
+.sql
+pnpm-lock.yaml
+yarn.lock
+package-lock.json
+.env
+.DS_Store
+config.db.json
+backups/
+.zip
+.vscode/
+limited_dump.sql

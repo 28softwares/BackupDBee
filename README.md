@@ -1,0 +1,94 @@
+# autobackup-db-and-email
+
+Effortlessly manage your database backups at one go. This easy-to-use tool supports MySQL & PostgreSQL allowing you to back up multiple databases at once.
+
+#### Key features include:
+
+- Multiple Database Support: Seamlessly back up MySQL & PostgreSQL in one go. Note: For now we support MySQL and PostgreSQl.
+- Automated Backups: Schedule and automate backups to ensure your data is always protected without manual intervention.
+- Compression: Compress backups into zip files to save storage space and optimize transfer times.
+- Email Integration: Instantly send backup files directly to your inbox or designated recipients for easy access and archiving.
+
+## Clone the project :
+
+```
+git clone https://github.com/28softwares/autobackup-db-and-email.git
+cd autobackup-db-and-email
+```
+
+### Initial Setup
+
+Make sure to install nodejs and zip in the linux server.
+
+```bash
+    sudo apt-get install zip && npm i
+    # make it executable
+    chmod +x index.sh
+    #To test the file Run the following command.
+    ./index.sh
+```
+
+### Configurations
+
+Add your database configuration in '.env' as
+
+```env
+
+
+# use for postgres.
+POSTGRES_DB_HOST='localhost'
+POSTGRES_DB_USER='postgres'
+POSTGRES_DB_PASSWORD='password'
+POSTGRES_DB_NAME='database_name' #also set multiple database names separated by comma.i.e. 'database_name,database_name2,database_name3'
+
+POSTGRES_DB_PORT=5432
+#ignore postgres config in env if not used.
+
+
+# use for mysql.
+MYSQL_DB_HOST='localhost'
+MYSQL_DB_USER='root'
+MYSQL_DB_PASSWORD='password'
+MYSQL_DB_NAME='database_name' #multiple db names as like above.
+MYSQL_DB_PORT=3306
+#ignore mysql config in env if not used.
+
+
+```
+
+### Other Configuration (Optional)
+
+```
+    mail_backup: false  // {default:true}
+    port: 5432,
+    ssl: false,
+```
+
+To send backup through mail you need to add mail credentials to .env.
+Note: You cannot pass your regular password if 2FA is enabled on your mail account. For this, You can create an app specific password from here [Google App Password]: https://myaccount.google.com/apppasswords.
+
+```bash
+  MAIL_USER='example@gmail.com'
+  MAIL_PASSWORD='example password'
+```
+
+Set the cronjob.
+
+```bash
+    crontab -e
+
+    #at the crontab file, add the following script.
+
+    #minute hour dayOfMonth month dayOfWeek commandToRun
+* * * * * commandToRun {_ can be any value}
+```
+
+OR, you can use process managers as
+
+```
+pm2 start src/index.js --name dbbackup --cron "* * * * *"
+```
+
+## Feel Free To Contribute
+
+Customize it further based on your tool’s specific features and benefits! PR are welcome.
