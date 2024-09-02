@@ -19,7 +19,7 @@ class EnvConfig {
     .POSTGRES_DB_PASSWORD as string;
 
   //  MYSQL DATABASE CONFIGURATION
-  public static MYSQL_HOST = process.env.MYSQL_HOST as string;
+  public static MYSQL_DB_HOST = process.env.MYSQL_DB_HOST as string;
   public static MYSQL_DB_NAME = process.env.MYSQL_DB_NAME as string;
   public static MYSQL_DB_USER = process.env.MYSQL_DB_USER as string;
   public static MYSQL_DB_PASSWORD = process.env.MYSQL_DB_PASSWORD as string;
@@ -27,6 +27,9 @@ class EnvConfig {
   // DISCORD CONFIGURATION
   public static BACKUP_NOTIFICATION = process.env.BACKUP_NOTIFICATION as string;
   public static DISCORD_WEBHOOK_URL = process.env.DISCORD_WEBHOOK_URL as string;
+
+  // SLACK CONFIGURATION
+  public static SLACK_WEBHOOK_URL = process.env.SLACK_WEBHOOK_URL as string;
 }
 
 export default EnvConfig;

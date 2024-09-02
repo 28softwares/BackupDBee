@@ -1,5 +1,5 @@
 import Print from "../constants/Print";
-import { Notifier } from "./notifier.utils";
+import { Notifier } from "./Notifier";
 
 export class SlackNotifier extends Notifier {
   private message: string = "";

@@ -1,31 +1,9 @@
 import { NotifyOnMedium } from "../@types/types";
 import Print from "../constants/Print";
-import { Notifier, NotifierOption } from "./notifier.utils";
-import { SlackNotifier } from "./slack.utils";
-
-export async function notifyOnSlack(webhookUrl: string, message: string) {
-  const slackMessage = {
-    text: `AutoBackup🤖: ${message}`,
-  };
-  try {
-    await fetch(webhookUrl, {
-      method: "POST",
-      headers: {
-        "Content-Type": "application/json",
-      },
-      body: JSON.stringify(slackMessage),
-    });
-    console.log("Slack Notification Successfully Sent...");
-  } catch (error) {
-    console.error(error);
-  }
-}
-
-const validateSlack = (webHookURL: string | undefined) => {
-  if (!webHookURL) {
-    throw new Error("SLACK_WEBHOOK_URL is not set");
-  }
-};
+import EnvConfig from "../constants/env.config";
+import { DiscordNotifier } from "../notifiers/DiscordNotifier";
+import { Notifier, NotifierOption } from "../notifiers/Notifier";
+import { SlackNotifier } from "../notifiers/SlackNotifier";
 
 export const notify = async (
   notify_on: NotifyOnMedium[],
@@ -35,9 +13,18 @@ export const notify = async (
   for (const medium of notify_on) {
     switch (medium) {
       case "SLACK":
-        const webHookURL = process.env.SLACK_WEBHOOK_URL!; // eslint-disable-line
+        const webHookURL = EnvConfig.SLACK_WEBHOOK_URL!; // eslint-disable-line
         notifiers.push(
           new SlackNotifier(webHookURL).withMessage(
+            `Backup completed successfully for database: ${
+              option.databaseName
+            } at ${new Date()}`
+          )
+        );
+        break;
+      case "DISCORD":
+        notifiers.push(
+          new DiscordNotifier(EnvConfig.DISCORD_WEBHOOK_URL!).withMessage(
             `Backup completed successfully for database: ${
               option.databaseName
             } at ${new Date()}`

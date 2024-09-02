@@ -11,11 +11,8 @@ import { execAsync } from "..";
 import { sendMail } from "./mailer.utils";
 import "dotenv/config";
 
-import { NotificationMessage } from "../constants/message";
-import { notify, notifyOnSlack } from "./notify.utils";
+import { notify } from "./notify.utils";
 import EnvConfig from "../constants/env.config";
-import { sendDiscordNotification } from "./discord.utils";
-
 
 const ensureDirectory = (dirPath: string) => {
   if (!existsSync(dirPath)) {
@@ -37,7 +34,7 @@ const spawnDumpProcess = (
 };
 
 const handleMysqlDump = (data: ConfigType, dumps: DumpType[]) => {
-  const dbNames = data.db_name!.includes(",")
+  const dbNames = data.db_name?.includes(",")
     ? data.db_name!.split(",")
     : [data.db_name!];
   const args = ["-h", data.host!, "-u", data.user!, "--databases", ...dbNames];
@@ -96,8 +93,6 @@ const handleDumpFailure = (
   reject(new Error(`Cannot backup ${databaseName}`));
 };
 
-
-
 const finalizeBackup = async (
   dumpFilePath: string,
   databaseName: string,
@@ -109,16 +104,14 @@ const finalizeBackup = async (
 
   try {
     await execAsync(`zip -j ${compressedFilePath} ${dumpFilePath}`);
-  
-    
-    
-       switch (backupDest) {
-            case "GMAIL":
-              await sendMail(compressedFilePath);
-              break;
-            default:
-              break;
-       }
+
+    switch (backupDest) {
+      case "GMAIL":
+        await sendMail(compressedFilePath);
+        break;
+      default:
+        break;
+    }
 
     rmSync(dumpFilePath);
     resolve(compressedFilePath);
@@ -137,13 +130,13 @@ const backupHelper = async (data: ConfigType) => {
 
   switch (data.type) {
     case "mysql":
-      // If multiple database name given, dump all databases
-      handleMysqlDump(data, dumps);
+      if (data.db_name && data.user && data.password)
+        handleMysqlDump(data, dumps);
       break;
     case "postgres":
       // If multiple database name given, dump all databases
-      console.log("PG:", data);
-      handlePostgresDump(data, dumps);
+      if (data.db_name && data.user && data.password)
+        handlePostgresDump(data, dumps);
       break;
     default:
       return Promise.reject(
@@ -187,10 +180,11 @@ const backupHelper = async (data: ConfigType) => {
           resolve,
           reject
         );
-        await notify(data.notify_on, {
+        //
+
+        await notify([EnvConfig.BACKUP_NOTIFICATION] as NotifyOnMedium[], {
           databaseName,
         });
-
       });
     });
   });
