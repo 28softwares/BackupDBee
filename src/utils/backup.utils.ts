@@ -142,9 +142,15 @@ const backupHelper = async (data: ConfigType) => {
         try {
           //compressing the backup file
           await execAsync(`zip -j ${dumpFilePath}.zip ${dumpFilePath}`);
-          if (data.mail_backup != false) {
-            sendMail(`${dumpFilePath}.zip`);
+
+          switch (data.backupDest) {
+            case "GMAIL":
+              sendMail(`${dumpFilePath}.zip`);
+              break;
+            default:
+              break;
           }
+
           //remove the uncompressed file
           rmSync(dumpFilePath);
           resolve(backupDir);

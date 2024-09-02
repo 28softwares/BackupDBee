@@ -3,7 +3,6 @@ import { createTransport } from "nodemailer";
 import EnvConfig from "../constants/env.config";
 import Print from "../constants/Print";
 
-
 const transporter = createTransport({
   host: "smtp.gmail.com",
   secure: true,
@@ -14,16 +13,14 @@ const transporter = createTransport({
   },
 });
 
-
 transporter.verify(function (error) {
   if (error) {
     console.log(error);
-    Print.error("Mail setup failed")
+    Print.error("Mail setup failed");
   } else {
     console.log("Sending backups...");
   }
 });
-
 
 // eslint-disable-next-line @typescript-eslint/no-explicit-any
 export const sendMail = async (file: any) => {
@@ -33,6 +30,5 @@ export const sendMail = async (file: any) => {
     html: "<h1>Date : " + new Date() + "</h1>",
     subject: `Backups`,
     attachments: [{ path: file }],
-  }
-);
+  });
 };

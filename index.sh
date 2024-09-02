@@ -20,4 +20,17 @@ then
     exit 1
 fi
 
+if ! command -v pnpm &> /dev/null
+then 
+    echo "pnpm command not found!"
+    exit 1
+fi
+
+if ! command -v node &> /dev/null
+then 
+    echo "node command not found!"
+    exit 1
+fi
+
+
 pnpm install && pnpm start
