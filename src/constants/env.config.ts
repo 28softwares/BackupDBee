@@ -23,6 +23,10 @@ class EnvConfig {
   public static MYSQL_DB_NAME = process.env.MYSQL_DB_NAME as string;
   public static MYSQL_DB_USER = process.env.MYSQL_DB_USER as string;
   public static MYSQL_DB_PASSWORD = process.env.MYSQL_DB_PASSWORD as string;
+
+  // DISCORD CONFIGURATION
+  public static BACKUP_NOTIFICATION = process.env.BACKUP_NOTIFICATION as string;
+  public static DISCORD_WEBHOOK_URL = process.env.DISCORD_WEBHOOK_URL as string;
 }
 
 export default EnvConfig;
