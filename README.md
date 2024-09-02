@@ -8,6 +8,7 @@ Effortlessly manage your database backups at one go. This easy-to-use tool suppo
 - Automated Backups: Schedule and automate backups to ensure your data is always protected without manual intervention.
 - Compression: Compress backups into zip files to save storage space and optimize transfer times.
 - Email Integration: Instantly send backup files directly to your inbox or designated recipients for easy access and archiving.
+- Get Notified: Receive email notifications for successful and failed backups to stay informed and take action as needed. (on Discord or Slack)
 
 ## Clone the project :
 
@@ -56,14 +57,6 @@ MYSQL_DB_PORT=3306
 
 ```
 
-### Other Configuration (Optional)
-
-```
-    mail_backup: false  // {default:true}
-    port: 5432,
-    ssl: false,
-```
-
 To send backup through mail you need to add mail credentials to .env.
 Note: You cannot pass your regular password if 2FA is enabled on your mail account. For this, You can create an app specific password from here [Google App Password]: https://myaccount.google.com/apppasswords.
 
@@ -75,15 +68,14 @@ Note: You cannot pass your regular password if 2FA is enabled on your mail accou
 Set the cronjob.
 
 ```bash
-    crontab -e
+crontab -e
 
-    #at the crontab file, add the following script.
-
-    #minute hour dayOfMonth month dayOfWeek commandToRun
-* * * * * commandToRun {_ can be any value}
+#at the crontab file, add the following script.
+#minute hour dayOfMonth month dayOfWeek commandToRun
+* * * * * commandToRun {_ can be any value}~~
 ```
 
-OR, you can use process managers as
+_OR, you can use process managers as_
 
 ```
 pm2 start src/index.js --name dbbackup --cron "* * * * *"
@@ -93,9 +85,10 @@ pm2 start src/index.js --name dbbackup --cron "* * * * *"
 
 Customize it further based on your tool’s specific features and benefits! PR are welcome.
 
-## Todo
+---
 
-- [ ] Slack Notification Integration (When the backup is completed, send a message to the slack channel)
+## Todos
+
 - [ ] S3 Bucket Integration (Currently, the backup db is only sent to GMAIL. When GMAIL gets full, s3 can be our alternative. For this, we check for `BACKUP_DEST=S3_BUCKET`)
 - [ ] Multiple Email Support (Currently, only one email can be sent. We can add multiple emails to send the backup to multiple people)
 - [ ] To make project CLI Based (Since we have `scripts/dump_data_for_test.sh` which we have to do manually, but if we can make cli based from `index.sh` then it will be more user friendly; by providing flags)
