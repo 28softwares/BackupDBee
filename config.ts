@@ -9,7 +9,7 @@ const dbConfig: ConfigType[] = [
     db_name: EnvConfig.POSTGRES_DB_NAME,
     user: EnvConfig.POSTGRES_DB_USER,
     password: EnvConfig.POSTGRES_DB_PASSWORD,
-    mail_backup: false,
+    backupDest: EnvConfig.BACKUP_DEST,
     type: "postgres",
   },
   {

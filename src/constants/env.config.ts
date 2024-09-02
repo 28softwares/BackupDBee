@@ -1,10 +1,15 @@
 /* eslint-disable no-undef */
 import "dotenv/config";
 
+export type BackupDest = "GMAIL" | undefined;
+
 class EnvConfig {
   // MAIL
   public static MAIL_USER = process.env.MAIL_USER as string;
   public static MAIL_PASSWORD = process.env.MAIL_PASSWORD as string;
+
+  //BACKUP_CONFIG
+  public static BACKUP_DEST = process.env.BACKUP_DEST as BackupDest;
 
   //  POSTGRES DATABASE CONFIGURATION
   public static POSTGRES_DB_HOST = process.env.POSTGRES_DB_HOST as string;
