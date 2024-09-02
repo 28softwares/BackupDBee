@@ -11,13 +11,7 @@ const dbConfig: ConfigType[] = [
     password: EnvConfig.POSTGRES_DB_PASSWORD,
     backupDest: EnvConfig.BACKUP_DEST,
     type: "postgres",
-  },
-  {
-    host: process.env.MYSQL_HOST,
-    db_name: process.env.MYSQL_DB_NAME,
-    user: process.env.MYSQL_DB_USER,
-    password: process.env.MYSQL_DB_PASSWORD,
-    type: "mysql",
+    notify_on: ["SLACK"]
   },
   // add multiple databases here
 ];
