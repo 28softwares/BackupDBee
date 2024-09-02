@@ -95,7 +95,6 @@ Customize it further based on your tool’s specific features and benefits! PR a
 
 ## Todo
 
-- [ ] Discord Notification Integration (When the backup is completed, send a message to the discord channel)
 - [ ] Slack Notification Integration (When the backup is completed, send a message to the slack channel)
 - [ ] S3 Bucket Integration (Currently, the backup db is only sent to GMAIL. When GMAIL gets full, s3 can be our alternative. For this, we check for `BACKUP_DEST=S3_BUCKET`)
 - [ ] Multiple Email Support (Currently, only one email can be sent. We can add multiple emails to send the backup to multiple people)
