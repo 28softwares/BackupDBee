@@ -6,6 +6,8 @@ import { ConfigType } from "../@types/types";
 import { execAsync } from "..";
 import { sendMail } from "./mailer.utils";
 import "dotenv/config";
+import EnvConfig from "../constants/env.config";
+import { sendDiscordNotification } from "./discord.utils";
 
 const ensureDirectory = (dirPath: string) => {
   if (!existsSync(dirPath)) {
@@ -157,6 +159,14 @@ const backupHelper = async (data: ConfigType) => {
         } catch {
           Print.error(`Error compressing ${data.db_name}`);
           reject(`Error compressing ${data.db_name}`);
+          return;
+        }
+        // send notification to discord if webhook url is set and backup notification is set to discord
+        if (
+          EnvConfig.DISCORD_WEBHOOK_URL &&
+          EnvConfig.BACKUP_NOTIFICATION === "DISCORD"
+        ) {
+          await sendDiscordNotification();
         }
       });
     });
