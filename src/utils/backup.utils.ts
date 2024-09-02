@@ -74,6 +74,7 @@ const handleDumpError = (
   Print.error(`Cannot backup ${databaseName}`);
   if (existsSync(dumpFilePath)) {
     rmSync(dumpFilePath);
+    rmSync(`${dumpFilePath}.zip`);
   }
   reject(new Error(`Cannot backup ${databaseName}`));
 };
@@ -89,6 +90,7 @@ const handleDumpFailure = (
   Print.error(`Cannot backup ${databaseName}`);
   if (existsSync(dumpFilePath)) {
     rmSync(dumpFilePath);
+    rmSync(`${dumpFilePath}.zip`);
   }
   reject(new Error(`Cannot backup ${databaseName}`));
 };
@@ -96,7 +98,6 @@ const handleDumpFailure = (
 const finalizeBackup = async (
   dumpFilePath: string,
   databaseName: string,
-  backupDest: string | undefined,
   resolve: (value: unknown) => void,
   reject: (reason?: any) => void
 ) => {
@@ -105,7 +106,7 @@ const finalizeBackup = async (
   try {
     await execAsync(`zip -j ${compressedFilePath} ${dumpFilePath}`);
 
-    switch (backupDest) {
+    switch (EnvConfig.BACKUP_DEST) {
       case "GMAIL":
         await sendMail(compressedFilePath);
         break;
@@ -113,7 +114,9 @@ const finalizeBackup = async (
         break;
     }
 
+    console.log(`Removing dump file.. ${dumpFilePath}`);
     rmSync(dumpFilePath);
+    rmSync(`${dumpFilePath}.zip`);
     resolve(compressedFilePath);
   } catch (err: unknown) {
     console.error(
@@ -173,13 +176,7 @@ const backupHelper = async (data: ConfigType) => {
         }
 
         console.log(`Backup of ${databaseName} completed successfully`);
-        await finalizeBackup(
-          dumpFilePath,
-          databaseName,
-          data.backupDest,
-          resolve,
-          reject
-        );
+        await finalizeBackup(dumpFilePath, databaseName, resolve, reject);
         //
 
         await notify([EnvConfig.BACKUP_NOTIFICATION] as NotifyOnMedium[], {
