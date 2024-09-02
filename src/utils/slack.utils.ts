@@ -16,10 +16,8 @@ export class SlackNotifier extends Notifier {
     }
   }
 
-  async notify(message: string) {
-    console.log("Sending Slack Notification...", message, this.message);
+  async notify(message?: string) {
     if (message) {
-      console.log("Message...:", message);
       this.message = message;
     }
     this.validate();

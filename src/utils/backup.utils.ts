@@ -105,7 +105,7 @@ const finalizeBackup = async (
 
   try {
     await execAsync(`zip -j ${compressedFilePath} ${dumpFilePath}`);
-
+    
     if (backupDest === "GMAIL") {
       await sendMail(compressedFilePath);
     }
