@@ -145,7 +145,7 @@ const backupHelper = async (data: ConfigType) => {
 
           switch (data.backupDest) {
             case "GMAIL":
-              sendMail(`${dumpFilePath}.zip`);
+              await sendMail(`${dumpFilePath}.zip`);
               break;
             default:
               break;
