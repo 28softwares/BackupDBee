@@ -10,8 +10,12 @@ import { ConfigType, NotifyOnMedium } from "../@types/types";
 import { execAsync } from "..";
 import { sendMail } from "./mailer.utils";
 import "dotenv/config";
+
 import { NotificationMessage } from "../constants/message";
 import { notify, notifyOnSlack } from "./notify.utils";
+import EnvConfig from "../constants/env.config";
+import { sendDiscordNotification } from "./discord.utils";
+
 
 const ensureDirectory = (dirPath: string) => {
   if (!existsSync(dirPath)) {
@@ -105,10 +109,16 @@ const finalizeBackup = async (
 
   try {
     await execAsync(`zip -j ${compressedFilePath} ${dumpFilePath}`);
+  
     
-    if (backupDest === "GMAIL") {
-      await sendMail(compressedFilePath);
-    }
+    
+       switch (backupDest) {
+            case "GMAIL":
+              await sendMail(compressedFilePath);
+              break;
+            default:
+              break;
+       }
 
     rmSync(dumpFilePath);
     resolve(compressedFilePath);
@@ -168,6 +178,7 @@ const backupHelper = async (data: ConfigType) => {
           handleDumpFailure(code, errorMsg, databaseName, dumpFilePath, reject);
           return;
         }
+
         console.log(`Backup of ${databaseName} completed successfully`);
         await finalizeBackup(
           dumpFilePath,
@@ -179,6 +190,7 @@ const backupHelper = async (data: ConfigType) => {
         await notify(data.notify_on, {
           databaseName,
         });
+
       });
     });
   });
