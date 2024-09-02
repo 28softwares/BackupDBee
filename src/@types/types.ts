@@ -6,5 +6,6 @@ export type ConfigType = {
   type: "postgres" | "mysql";
   port?: number;
   ssl?: boolean;
+  backupDest?: "GMAIL";
   mail_backup?: boolean;
 };
