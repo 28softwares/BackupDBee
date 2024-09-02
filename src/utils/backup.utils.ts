@@ -166,7 +166,7 @@ const backupHelper = async (data: ConfigType) => {
           EnvConfig.DISCORD_WEBHOOK_URL &&
           EnvConfig.BACKUP_NOTIFICATION === "DISCORD"
         ) {
-          await sendDiscordNotification();
+          await sendDiscordNotification(_.databaseName);
         }
       });
     });

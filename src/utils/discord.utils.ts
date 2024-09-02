@@ -1,9 +1,9 @@
 import EnvConfig from "../constants/env.config";
 import Print from "../constants/Print";
 
-export const sendDiscordNotification = async () => {
+export const sendDiscordNotification = async (dbName: string) => {
   const message = {
-    content: "Database backup completed successfully!",
+    content: `Database '${dbName}' successfully backuped.`,
     username: "Captain Hook",
   };
 
