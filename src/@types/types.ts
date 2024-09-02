@@ -8,7 +8,7 @@ export type ConfigType = {
   type: "postgres" | "mysql";
   port?: number;
   ssl?: boolean;
-  backupDest?: "GMAIL" | "SLACK";
+  backupDest?: "GMAIL";
   mail_backup?: boolean;
   notify_on: NotifyOnMedium[];
 };
