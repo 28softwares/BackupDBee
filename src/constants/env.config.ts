@@ -1,7 +1,7 @@
 /* eslint-disable no-undef */
 import "dotenv/config";
 
-export type BackupDest = "GMAIL" | undefined;
+export type BackupDest = "GMAIL" | "S3_BUCKET" | undefined;
 
 class EnvConfig {
   // MAIL
@@ -30,6 +30,13 @@ class EnvConfig {
 
   // SLACK CONFIGURATION
   public static SLACK_WEBHOOK_URL = process.env.SLACK_WEBHOOK_URL as string;
+
+  // S3 CONFIGURATION
+  public static AWS_ACCESS_KEY_ID = process.env.AWS_ACCESS_KEY_ID as string;
+  public static AWS_SECRET_ACCESS_KEY = process.env
+    .AWS_SECRET_ACCESS_KEY as string;
+  public static AWS_S3_BUCKET_NAME = process.env.AWS_S3_BUCKET_NAME as string;
+  public static AWS_REGION = process.env.AWS_REGION as string;
 }
 
 export default EnvConfig;

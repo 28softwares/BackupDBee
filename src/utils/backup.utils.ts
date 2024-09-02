@@ -10,9 +10,10 @@ import { ConfigType, NotifyOnMedium } from "../@types/types";
 import { execAsync } from "..";
 import { sendMail } from "./mailer.utils";
 import "dotenv/config";
-
+import fs from "fs";
 import { notify } from "./notify.utils";
 import EnvConfig from "../constants/env.config";
+import uploadToS3 from "./s3.utils";
 
 const ensureDirectory = (dirPath: string) => {
   if (!existsSync(dirPath)) {
@@ -110,6 +111,13 @@ const finalizeBackup = async (
       case "GMAIL":
         await sendMail(compressedFilePath);
         break;
+      case "S3_BUCKET":
+        await uploadToS3(
+          dumpFilePath.split("/").pop() + ".zip",
+          fs.readFileSync(compressedFilePath)
+        );
+        break;
+
       default:
         break;
     }
@@ -128,18 +136,19 @@ const finalizeBackup = async (
 };
 
 const backupHelper = async (data: ConfigType) => {
+  // if no config provided, return
+  if (!data.db_name && !data.user && !data.password) return;
+
   const dumps: DumpType[] = [] as DumpType[];
   let errorMsg: string | null = null;
 
   switch (data.type) {
     case "mysql":
-      if (data.db_name && data.user && data.password)
-        handleMysqlDump(data, dumps);
+      handleMysqlDump(data, dumps);
       break;
     case "postgres":
       // If multiple database name given, dump all databases
-      if (data.db_name && data.user && data.password)
-        handlePostgresDump(data, dumps);
+      handlePostgresDump(data, dumps);
       break;
     default:
       return Promise.reject(
