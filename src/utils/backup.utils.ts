@@ -65,9 +65,6 @@ const finalizeBackup = async (dumpFilePath: string, databaseName: string) => {
         break;
     }
 
-    console.log(`Removing dump file.. ${dumpFilePath}`);
-    rmSync(dumpFilePath);
-    rmSync(`${dumpFilePath}.zip`);
     return compressedFilePath;
   } catch (err: unknown) {
     console.error(
@@ -79,9 +76,6 @@ const finalizeBackup = async (dumpFilePath: string, databaseName: string) => {
 };
 
 const backupHelper = async (data: ConfigType): Promise<DumpInfo | null> => {
-  // if no config provided, return
-  if (!data.db_name && !data.user && !data.password) return null;
-
   const dumps: DumpType[] = [] as DumpType[];
   let errorMsg: string | null = null;
 
@@ -136,6 +130,11 @@ const backupHelper = async (data: ConfigType): Promise<DumpInfo | null> => {
           databaseName
         );
         if (compressedFilePath) {
+          // Remove locally created dump files.
+          console.log(`Removing dump file.. ${dumpFilePath}`);
+          rmSync(dumpFilePath);
+          rmSync(`${dumpFilePath}.zip`);
+
           resolve({
             databaseName,
             compressedFilePath,
