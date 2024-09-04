@@ -1,36 +1,36 @@
 #!/bin/bash
 
-if ! command -v zip &> /dev/null
-then
-    echo "zip command not found"
-    exit 1
-fi
+# if ! command -v zip &> /dev/null
+# then
+#     echo "zip command not found"
+#     exit 1
+# fi
 
 
-if ! command -v pg_dump &> /dev/null
-then 
-    echo "pg_dump command not found!"
-    exit 1
-fi
+# if ! command -v pg_dump &> /dev/null
+# then 
+#     echo "pg_dump command not found!"
+#     exit 1
+# fi
 
 
-if ! command -v mysqldump &> /dev/null
-then 
-    echo "mysqldump command not found!"
-    exit 1
-fi
+# if ! command -v mysqldump &> /dev/null
+# then 
+#     echo "mysqldump command not found!"
+#     exit 1
+# fi
 
-if ! command -v pnpm &> /dev/null
-then 
-    echo "pnpm command not found!"
-    exit 1
-fi
+# if ! command -v pnpm &> /dev/null
+# then 
+#     echo "pnpm command not found!"
+#     exit 1
+# fi
 
-if ! command -v node &> /dev/null
-then 
-    echo "node command not found!"
-    exit 1
-fi
+# if ! command -v node &> /dev/null
+# then 
+#     echo "node command not found!"
+#     exit 1
+# fi
 
 
 # Function to prompt user input with a default value
@@ -58,6 +58,7 @@ show_help() {
     echo "Usage: $0 [options]"
     echo "Options:"
     echo "  --update-notification-config  Run the notification configuration script"
+    echo "  --update-backup-dest          Run the backup configuration script"
     echo "  --help                        Show this help message"
 }
 
@@ -65,6 +66,10 @@ show_help() {
 case "$1" in
     --update-notification-config)
         ./scripts/update_notification_config.sh
+        exit 0
+        ;;
+    --update-backup-dest)
+        ./scripts/update_backup_dest.sh
         exit 0
         ;;
     --help)
