@@ -23,9 +23,12 @@ update_env_variable() {
     local value="$2"
     local file=".env"
 
+    # Escape special characters in the value
+    local escaped_value=$(printf '%s' "$value" | sed 's/[&/\]/\\&/g')
+
     # If the key exists, replace the line; otherwise, append it
     if grep -q "^$key=" "$file"; then
-        sed -i "s/^$key=.*/$key=$value/" "$file"
+        sed -i "s|^$key=.*|$key=$escaped_value|" "$file"
     else
         echo "$key=$value" >> "$file"
     fi
