@@ -1,11 +1,10 @@
 import backupHelper from "./utils/backup.utils";
-import Print from "./constants/Print";
 import dbConfig from "../config";
 import { exec } from "child_process";
 import { ConfigType } from "./@types/types";
 import { promisify } from "util";
-import { notify } from "./utils/notify.utils";
-import EnvConfig from "./constants/env.config";
+import Log from "./constants/Log";
+import { sendNotification } from "./utils/notify.utils";
 
 // Promisify exec to use with async/await
 export const execAsync = promisify(exec);
@@ -17,15 +16,15 @@ const main = async (configs: ConfigType[]) => {
       try {
         const dumpInfo = await backupHelper(config);
         if (!dumpInfo) {
-          Print.error("Backup failed.");
+          Log.error("Backup failed.");
           return;
         }
 
-        await notify(EnvConfig.BACKUP_NOTIFICATION, {
+        await sendNotification({
           databaseName: dumpInfo.databaseName,
         });
       } catch (e: unknown) {
-        Print.error("Backup failed." + e);
+        Log.error("Backup failed." + e);
       }
     }
   }

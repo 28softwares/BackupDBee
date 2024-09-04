@@ -1,7 +1,5 @@
 import { ChildProcessWithoutNullStreams } from "child_process";
 
-export type NotifyOnMedium = "SLACK" | "DISCORD";
-export type BackupDest = "GMAIL" | "S3_BUCKET";
 
 export type ConfigType = {
   host?: string;
@@ -10,7 +8,6 @@ export type ConfigType = {
   password?: string;
   type: "postgres" | "mysql";
   port?: number;
-  backupDest?: BackupDest;
 };
 
 export interface DumpType {

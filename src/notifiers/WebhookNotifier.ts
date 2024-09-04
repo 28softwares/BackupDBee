@@ -1,7 +1,7 @@
-import Print from "../constants/Print";
+import Log from "../constants/Log";
 import { Notifier } from "./Notifier";
 
-export class SlackNotifier extends Notifier {
+export class WebhookNotifier extends Notifier {
   private message: string = "";
 
   constructor(private readonly webhookUrl: string) {
@@ -11,8 +11,13 @@ export class SlackNotifier extends Notifier {
 
   validate() {
     if (!this.webhookUrl) {
-      Print.error("SLACK_WEBHOOK_URL is not set");
-      throw new Error("SLACK_WEBHOOK_URL is not set");
+      Log.error("WEBHOOK_URL is not set");
+      throw new Error("[-] WEBHOOK_URL is not set");
+    }
+
+    const newUrl = new URL(this.webhookUrl);
+    if (newUrl.protocol !== "http:" && newUrl.protocol !== "https:") {
+      throw new Error("[-] Webhook url is invalid. ");
     }
   }
 
@@ -21,8 +26,8 @@ export class SlackNotifier extends Notifier {
       this.message = message;
     }
     this.validate();
-    const slackMessage = {
-      text: `AutoBackup🤖: ${this.message}`,
+    const webhookMessage = {
+      content: this.message,
     };
     try {
       await fetch(this.webhookUrl, {
@@ -30,9 +35,9 @@ export class SlackNotifier extends Notifier {
         headers: {
           "Content-Type": "application/json",
         },
-        body: JSON.stringify(slackMessage),
+        body: JSON.stringify(webhookMessage),
       });
-      console.log("Slack Notification Successfully Sent...");
+      console.log("[+] Notification successfully sent");
     } catch (error) {
       console.error(error);
     }

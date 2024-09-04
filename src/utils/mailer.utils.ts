@@ -1,7 +1,6 @@
- 
-import { createTransport } from "nodemailer";
+ import { createTransport } from "nodemailer";
 import EnvConfig from "../constants/env.config";
-import Print from "../constants/Print";
+import Log from "../constants/Log";
 
 const transporter = createTransport({
   host: "smtp.gmail.com",
@@ -15,21 +14,21 @@ const transporter = createTransport({
 
 const validate = () => {
   if (!EnvConfig.MAIL_USER || !EnvConfig.MAIL_PASSWORD) {
-    throw new Error("MAIL_USER or MAIL_PASSWORD is not set");
+    throw new Error("[-] MAIL_USER or MAIL_PASSWORD is not set");
   }
   transporter.verify(function (error) {
     if (error) {
       console.log(error);
-      Print.error("Mail setup failed");
+      Log.error("[-] Mail setup failed");
     } else {
-      console.log("Sending backups...");
+      console.log("[+] Sending backups...");
     }
   });
 };
 
 // eslint-disable-next-line @typescript-eslint/no-explicit-any
 export const sendMail = async (file: any) => {
-  console.log("validating mail");
+  console.log("[+] validating mail");
   validate();
   return await transporter.sendMail({
     from: EnvConfig.MAIL_USER,

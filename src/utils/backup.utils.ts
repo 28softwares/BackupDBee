@@ -1,6 +1,6 @@
 import { createWriteStream, existsSync, mkdirSync, rmSync } from "fs";
 import * as fs from "fs";
-import Print from "../constants/Print";
+import Log from "../constants/Log";
 import path from "path";
 import { ConfigType, DumpInfo, DumpType } from "../@types/types";
 import { execAsync } from "..";
@@ -22,8 +22,8 @@ const handleDumpError = (
   databaseName: string,
   dumpFilePath: string
 ) => {
-  console.error(`Error spawning dump process: ${err}`);
-  Print.error(`Cannot backup ${databaseName}`);
+  console.error(`[-] Error spawning dump process: ${err}`);
+  Log.error(`Cannot backup ${databaseName}`);
   if (existsSync(dumpFilePath)) {
     rmSync(dumpFilePath);
     rmSync(`${dumpFilePath}.zip`);
@@ -36,8 +36,8 @@ const handleDumpFailure = (
   databaseName: string,
   dumpFilePath: string
 ) => {
-  console.error(`Dump process failed with code ${code}. Error: ${errorMsg}`);
-  Print.error(`Cannot backup ${databaseName}`);
+  console.error(`[-] Dump process failed with code ${code}. Error: ${errorMsg}`);
+  Log.error(`Cannot backup ${databaseName}`);
   if (existsSync(dumpFilePath)) {
     rmSync(dumpFilePath);
     rmSync(`${dumpFilePath}.zip`);
@@ -68,9 +68,9 @@ const finalizeBackup = async (dumpFilePath: string, databaseName: string) => {
     return compressedFilePath;
   } catch (err: unknown) {
     console.error(
-      `Error compressing ${databaseName}: ${(err as Error).message}`
+      `[-] Error compressing ${databaseName}: ${(err as Error).message}`
     );
-    Print.error(`Error compressing ${databaseName}`);
+    Log.error(`Error compressing ${databaseName}`);
     return "";
   }
 };
@@ -90,7 +90,7 @@ const backupHelper = async (data: ConfigType): Promise<DumpInfo | null> => {
       break;
     default:
       return Promise.reject(
-        new Error(`Unsupported database type: ${data.type}`)
+        new Error(`[-] Unsupported database type: ${data.type}`)
       );
   }
 
@@ -109,7 +109,7 @@ const backupHelper = async (data: ConfigType): Promise<DumpInfo | null> => {
 
       dumpedContent.stderr.on("data", (chunk) => {
         errorMsg = chunk.toString();
-        Print.error(errorMsg ?? "Error occurred while dumping");
+        Log.error(errorMsg ?? "Error occurred while dumping");
       });
 
       dumpedContent.on("error", (err) => {
