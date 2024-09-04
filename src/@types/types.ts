@@ -1,5 +1,6 @@
 import { ChildProcessWithoutNullStreams } from "child_process";
 
+export type NotifyOnMedium = "SLACK" | "DISCORD" | "CUSTOM";
 
 export type ConfigType = {
   host?: string;

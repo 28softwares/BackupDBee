@@ -1,7 +1,7 @@
 import Log from "../constants/Log";
 import { Notifier } from "./Notifier";
 
-export class WebhookNotifier extends Notifier {
+export class DiscordNotifier extends Notifier {
   private message: string = "";
 
   constructor(private readonly webhookUrl: string) {
@@ -11,13 +11,13 @@ export class WebhookNotifier extends Notifier {
 
   validate() {
     if (!this.webhookUrl) {
-      Log.error("WEBHOOK_URL is not set");
-      throw new Error("[-] WEBHOOK_URL is not set");
+      Log.error("Discord_URL is not set");
+      throw new Error("[-] Discord_URL is not set");
     }
 
     const newUrl = new URL(this.webhookUrl);
     if (newUrl.protocol !== "http:" && newUrl.protocol !== "https:") {
-      throw new Error("[-] Webhook url is invalid. ");
+      throw new Error("[-] Discord webhook url is invalid. ");
     }
   }
 
@@ -37,7 +37,7 @@ export class WebhookNotifier extends Notifier {
         },
         body: JSON.stringify(webhookMessage),
       });
-      console.log("[+] Notification successfully sent");
+      console.log("[+] Notification successfully sent to discord.");
     } catch (error) {
       console.error(error);
     }

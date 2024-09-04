@@ -8,7 +8,7 @@ Effortlessly manage your database backups at one go. This easy-to-use tool suppo
 - Automated Backups: Schedule and automate backups to ensure your data is always protected without manual intervention.
 - Compression: Compress backups into zip files to save storage space and optimize transfer times.
 - Email Integration: Instantly send backup files directly to your inbox or designated recipients for easy access and archiving.
-- Get Notified: Receive notifications for successful and failed backups to stay informed and take action as needed like Discord,Slack etc. _Supports only one Notifier for all backups_
+- Get Notified: Receive notifications for successful and failed backups to stay informed and take action as needed like Discord,Slack etc. Also supports custom webhooks.  _Supports only one Notifier for all backups_
 
 ## Clone the project :
 

@@ -1,21 +1,61 @@
+import { NotifyOnMedium } from "../@types/types";
 import Log from "../constants/Log";
 import EnvConfig from "../constants/env.config";
-import { NotifierOption } from "../notifiers/Notifier";
-import { WebhookNotifier } from "../notifiers/WebhookNotifier";
+import { CustomNotifier } from "../notifiers/CustomNotifier";
+import { Notifier, NotifierOption } from "../notifiers/Notifier";
+import { SlackNotifier } from "../notifiers/SlackNotifier";
+import { DiscordNotifier } from "../notifiers/DiscordNotifier";
 
 export const sendNotification = async (
+  mediums: string,
   option: NotifierOption
-) => {
-  const myArray = EnvConfig.WEBHOOK_URL?.split(",") || [];
-  
-  for (const webhook of myArray) {
-    try {
-      const notifier = new WebhookNotifier(webhook).withMessage(`[+] Backup created for ${option.databaseName} database.`);
-      notifier.notify()
-    } catch(error) {
-      Log.error("Notifier failed to send notification")
-      console.log("Notifier failed to send notification",error)
-      throw error;
+) => {  
+  const notify_on = mediums.split(",") as NotifyOnMedium[];
+  const notifiers: Notifier[] = [];
+  for (const medium of notify_on) {
+    switch (medium.trim().toUpperCase()) {
+      case "SLACK":
+        notifiers.push(
+          new SlackNotifier(EnvConfig.SLACK_WEBHOOK_URL!).withMessage(
+            `Backup completed successfully for database: ${
+              option.databaseName
+            } at ${new Date()}`
+          )
+        );
+        break;
+      case "DISCORD":
+        notifiers.push(
+          new DiscordNotifier(EnvConfig.DISCORD_WEBHOOK_URL!).withMessage(
+            `Backup completed successfully for database: ${
+              option.databaseName
+            } at ${new Date()}`
+          )
+        );
+        break;
+        case "CUSTOM":
+          notifiers.push(
+            new CustomNotifier(EnvConfig.CUSTOM_WEBHOOK_URL!).withMessage(
+              `Backup completed successfully for database: ${
+                option.databaseName
+              } at ${new Date()}`
+            )
+          );
+          break;
+      default:
+        console.error(`[-] Unsupported notification medium: ${medium}`);
+        Log.error(`Unsupported notification medium: ${medium}`);
     }
   }
+  const run = notifyAllMedium(notifiers);
+  run();
 };
+
+
+function notifyAllMedium(notifiers: Notifier[]) {
+  return async () => {
+    for (const notifier of notifiers) {
+      notifier.notify();
+    }
+  };
+}
+

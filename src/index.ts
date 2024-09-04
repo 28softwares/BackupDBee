@@ -5,7 +5,7 @@ import { ConfigType } from "./@types/types";
 import { promisify } from "util";
 import Log from "./constants/Log";
 import { sendNotification } from "./utils/notify.utils";
-
+import EnvConfig from "./constants/env.config";
 // Promisify exec to use with async/await
 export const execAsync = promisify(exec);
 
@@ -20,7 +20,7 @@ const main = async (configs: ConfigType[]) => {
           return;
         }
 
-        await sendNotification({
+        await sendNotification(EnvConfig.BACKUP_NOTIFICATION, {
           databaseName: dumpInfo.databaseName,
         });
       } catch (e: unknown) {
