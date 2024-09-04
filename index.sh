@@ -35,7 +35,7 @@ fi
 
 # Function to prompt user input with a default value
 prompt_input() {
-    read -p "$1 [$2]: " input
+    read -p "$1: " input
     echo "${input:-$2}"
 }
 
@@ -52,6 +52,29 @@ prompt_option() {
         fi
     done
 }
+
+# Function to show help
+show_help() {
+    echo "Usage: $0 [options]"
+    echo "Options:"
+    echo "  --update-notification-config  Run the notification configuration script"
+    echo "  --help                        Show this help message"
+}
+
+# Handle script arguments
+case "$1" in
+    --update-notification-config)
+        ./scripts/update_notification_config.sh
+        exit 0
+        ;;
+    --help)
+        show_help
+        exit 0
+        ;;
+    *)
+        # Proceed with normal execution
+        ;;
+esac
 
 # Choose backup option
 echo "Please choose a backup option:"
@@ -74,16 +97,28 @@ fi
 
 # Choose backup notification
 echo "Please choose a backup notification option:"
-BACKUP_NOTIFICATION=$(prompt_option "SLACK" "DISCORD")
+BACKUP_NOTIFICATION=$(prompt_option "SLACK" "DISCORD" "BOTH")
+
+# Initialize notification URLs
+SLACK_WEBHOOK_URL=""
+DISCORD_WEBHOOK_URL=""
 
 # Collect notification details based on the chosen notification option
-if [[ $BACKUP_NOTIFICATION == "SLACK" ]]; then
+if [[ $BACKUP_NOTIFICATION == "SLACK" || $BACKUP_NOTIFICATION == "BOTH" ]]; then
     SLACK_WEBHOOK_URL=$(prompt_input "Enter SLACK_WEBHOOK_URL")
-elif [[ $BACKUP_NOTIFICATION == "DISCORD" ]]; then
+fi
+
+if [[ $BACKUP_NOTIFICATION == "DISCORD" || $BACKUP_NOTIFICATION == "BOTH" ]]; then
     DISCORD_WEBHOOK_URL=$(prompt_input "Enter DISCORD_WEBHOOK_URL")
-else
-    echo "Invalid notification option selected."
-    exit 1
+fi
+
+# Adjust BACKUP_NOTIFICATION value for "Both" choice
+if [[ $BACKUP_NOTIFICATION == "BOTH" ]]; then
+    BACKUP_NOTIFICATION="SLACK,DISCORD"
+elif [[ $BACKUP_NOTIFICATION == "SLACK" ]]; then
+    BACKUP_NOTIFICATION="SLACK"
+elif [[ $BACKUP_NOTIFICATION == "DISCORD" ]]; then
+    BACKUP_NOTIFICATION="DISCORD"
 fi
 
 
