@@ -114,24 +114,24 @@ const backupHelper = async (data: ConfigType): Promise<DumpInfo | null> => {
 
       dumpedContent.on("error", (err) => {
         handleDumpError(err.message, databaseName, dumpFilePath);
-        reject(new Error(`Cannot backup ${databaseName}`));
+        reject(new Error(`[-] Cannot backup ${databaseName}`));
       });
 
       dumpedContent.on("close", async (code: number) => {
         if (code !== 0 || errorMsg) {
           handleDumpFailure(code, errorMsg, databaseName, dumpFilePath);
-          reject(new Error(`Cannot backup ${databaseName}`));
+          reject(new Error(`[-] Cannot backup ${databaseName}`));
           return;
         }
 
-        console.log(`Backup of ${databaseName} completed successfully`);
+        console.log(`[+] Backup of ${databaseName} completed successfully`);
         const compressedFilePath = await finalizeBackup(
           dumpFilePath,
           databaseName
         );
         if (compressedFilePath) {
           // Remove locally created dump files.
-          console.log(`Removing dump file.. ${dumpFilePath}`);
+          console.log(`[+] Removing dump file.. ${dumpFilePath}`);
           rmSync(dumpFilePath);
           rmSync(`${dumpFilePath}.zip`);
 
