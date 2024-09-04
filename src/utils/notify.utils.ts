@@ -6,14 +6,15 @@ import { Notifier, NotifierOption } from "../notifiers/Notifier";
 import { SlackNotifier } from "../notifiers/SlackNotifier";
 
 export const notify = async (
-  notify_on: NotifyOnMedium[],
+  mediums: string,
   option: NotifierOption
 ) => {
+  const notify_on = mediums.split(",") as NotifyOnMedium[];
   const notifiers: Notifier[] = [];
+  const webHookURL = EnvConfig.SLACK_WEBHOOK_URL;
   for (const medium of notify_on) {
-    switch (medium) {
+    switch (medium.trim().toUpperCase()) {
       case "SLACK":
-        const webHookURL = EnvConfig.SLACK_WEBHOOK_URL!; // eslint-disable-line
         notifiers.push(
           new SlackNotifier(webHookURL).withMessage(
             `Backup completed successfully for database: ${
