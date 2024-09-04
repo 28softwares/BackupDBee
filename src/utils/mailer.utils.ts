@@ -1,4 +1,4 @@
-/* eslint-disable no-undef */
+ 
 import { createTransport } from "nodemailer";
 import EnvConfig from "../constants/env.config";
 import Print from "../constants/Print";
