@@ -1,4 +1,3 @@
-/* eslint-disable @typescript-eslint/no-unused-expressions */
 import backupHelper from "./utils/backup.utils";
 import Print from "./constants/Print";
 import dbConfig from "../config";
@@ -25,8 +24,8 @@ const main = async (configs: ConfigType[]) => {
         await notify(EnvConfig.BACKUP_NOTIFICATION, {
           databaseName: dumpInfo.databaseName,
         });
-      } catch (error) {
-        Print.error("Backup failed.");
+      } catch (e: unknown) {
+        Print.error("Backup failed." + e);
       }
     }
   }

@@ -1,4 +1,4 @@
-/* eslint-disable no-undef */
+ 
 import "dotenv/config";
 import { ConfigType } from "./src/@types/types";
 import EnvConfig from "./src/constants/env.config";

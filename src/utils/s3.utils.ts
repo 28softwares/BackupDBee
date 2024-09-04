@@ -9,6 +9,7 @@ const s3Client = new S3Client({
   },
 });
 
+// eslint-disable-next-line
 export default async (fileName: string, fileContent: any) => {
   try {
     // Create the upload parameters
