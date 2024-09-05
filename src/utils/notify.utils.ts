@@ -6,39 +6,29 @@ import { Notifier, NotifierOption } from "../notifiers/Notifier";
 import { SlackNotifier } from "../notifiers/SlackNotifier";
 import { DiscordNotifier } from "../notifiers/DiscordNotifier";
 
+
 export const sendNotification = async (
   mediums: string,
   option: NotifierOption
 ) => {  
   const notify_on = mediums.split(",") as NotifyOnMedium[];
   const notifiers: Notifier[] = [];
+  const message =  `Backup completed successfully for database: ${option.databaseName} at ${new Date()}`
   for (const medium of notify_on) {
     switch (medium.trim().toUpperCase()) {
       case "SLACK":
         notifiers.push(
-          new SlackNotifier(EnvConfig.SLACK_WEBHOOK_URL!).withMessage(
-            `Backup completed successfully for database: ${
-              option.databaseName
-            } at ${new Date()}`
-          )
+          new SlackNotifier(EnvConfig.SLACK_WEBHOOK_URL!,message)
         );
         break;
       case "DISCORD":
         notifiers.push(
-          new DiscordNotifier(EnvConfig.DISCORD_WEBHOOK_URL!).withMessage(
-            `Backup completed successfully for database: ${
-              option.databaseName
-            } at ${new Date()}`
-          )
+          new DiscordNotifier(EnvConfig.DISCORD_WEBHOOK_URL!,message)
         );
         break;
         case "CUSTOM":
           notifiers.push(
-            new CustomNotifier(EnvConfig.CUSTOM_WEBHOOK_URL!).withMessage(
-              `Backup completed successfully for database: ${
-                option.databaseName
-              } at ${new Date()}`
-            )
+            new CustomNotifier(EnvConfig.CUSTOM_WEBHOOK_URL!,message)
           );
           break;
       default:
@@ -54,8 +44,15 @@ export const sendNotification = async (
 function notifyAllMedium(notifiers: Notifier[]) {
   return async () => {
     for (const notifier of notifiers) {
-      notifier.notify();
-    }
+      try {
+        notifier.validate(); 
+        await notifier.sendNotification(); 
+      // eslint-disable-next-line @typescript-eslint/no-explicit-any
+      } catch (error:any) {
+        Log.error(`Validation or notification error: ${error.message}`);
+        console.error(`[-] Validation or notification error: ${error.message}`);
+      }
   };
+}
 }
 
