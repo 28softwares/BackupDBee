@@ -52,3 +52,9 @@ Customize it further based on your tool’s specific features and benefits! PR a
 ## Todos ✅
 
 - [ ] (Under progress) To make project CLI Based (Since we have `scripts/dump_data_for_test.sh` which we have to do manually, but if we can make cli based from `index.sh` then it will be more user friendly; by providing flags)
+
+## Contributors 🤝
+
+<a href = "https://github.com/28softwares/autobackup-db-and-email">
+  <img src = "https://contrib.rocks/image?repo=28softwares/autobackup-db-and-email"/>
+</a>
