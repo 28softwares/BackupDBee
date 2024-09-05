@@ -14,8 +14,11 @@
   "license": "ISC",
   "dependencies": {
     "@aws-sdk/client-s3": "^3.637.0",
+    "@inquirer/prompts": "^5.4.0",
     "@types/nodemailer": "^6.4.15",
+    "chalk": "^5.3.0",
     "class-transformer": "^0.5.1",
+    "commander": "^12.1.0",
     "dotenv": "^16.4.5",
     "nodemailer": "^6.9.14",
     "ts-node": "^10.9.2",
