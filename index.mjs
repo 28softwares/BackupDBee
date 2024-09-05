@@ -39,6 +39,7 @@ program
     let backupNotification = "";
     let slackWebhook = "";
     let discordWebhook = "";
+    let databaseType = "";
     let postgresHost = "";
     let postgresDbName = "";
     let postgresDbUser = "";
@@ -108,28 +109,50 @@ program
       process.exit(1);
     }
 
-    postgresHost = await input({
-      message: "Enter your postgres host:",
+    databaseType = await select({
+      message: "Please choose a database type:",
+      choices: [
+        {
+          name: "Postgres",
+          value: "POSTGRES",
+        },
+        {
+          name: "MySQL",
+          value: "MYSQL",
+        },
+        {
+          name: "Both",
+          value: "BOTH",
+        },
+      ],
     });
-    postgresDbName = await input({
-      message: "Enter your postgres database name:",
-    });
-    postgresDbUser = await input({
-      message: "Enter your postgres database user:",
-    });
-    postgresDbPassword = await input({
-      message: "Enter your postgres database password:",
-    });
-    mysqlHost = await input({ message: "Enter your mysql host:" });
-    mysqlDbName = await input({
-      message: "Enter your mysql database name:",
-    });
-    mysqlDbUser = await input({
-      message: "Enter your mysql database user:",
-    });
-    mysqlDbPassword = await input({
-      message: "Enter your mysql database password:",
-    });
+
+    if (databaseType === "POSTGRES" || databaseType === "BOTH") {
+      postgresHost = await input({
+        message: "Enter your postgres host:",
+      });
+      postgresDbName = await input({
+        message: "Enter your postgres database name:",
+      });
+      postgresDbUser = await input({
+        message: "Enter your postgres database user:",
+      });
+      postgresDbPassword = await input({
+        message: "Enter your postgres database password:",
+      });
+    }
+    if (databaseType === "MYSQL" || databaseType === "BOTH") {
+      mysqlHost = await input({ message: "Enter your mysql host:" });
+      mysqlDbName = await input({
+        message: "Enter your mysql database name:",
+      });
+      mysqlDbUser = await input({
+        message: "Enter your mysql database user:",
+      });
+      mysqlDbPassword = await input({
+        message: "Enter your mysql database password:",
+      });
+    }
 
     let envVariables = `#MAIL
 MAIL_USER=${mailUser}
@@ -234,7 +257,6 @@ program
       // now write the new data to the .env file
       fs.writeFileSync(".env", data);
 
-      // fs.writeFileSync(".env", envVariables);
       console.log(chalk.green("Environment variables updated successfully!"));
     } catch (error) {
       console.log(chalk.red("Failed to write environment variables!"));
