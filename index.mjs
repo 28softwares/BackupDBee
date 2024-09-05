@@ -6,6 +6,7 @@ import { execSync } from "child_process";
 import chalk from "chalk";
 import { Command } from "commander";
 import { input, select } from "@inquirer/prompts";
+import cron from "node-cron";
 
 const program = new Command();
 program.version("1.0.0").description("AutoBackup DB CLI");
@@ -340,6 +341,47 @@ program
       console.log(chalk.red(error.message));
       process.exit(1);
     }
+  });
+
+program
+  .command("run")
+  .description("Run the backup process with cron scheduling")
+  .option("--cron <schedule>", "Cron schedule (default is once per day)")
+  .action((cmd) => {
+    // Check if .env file exists
+    if (!fs.existsSync(".env")) {
+      console.log(chalk.red("Environment variables file not found!"));
+      console.log(chalk.red("Please run the install command first!"));
+      process.exit(1);
+    }
+    const cronSchedule = cmd.cron || "0 0 * * *"; // Default: once per day
+
+    // Define the backup process
+    const backupProcess = () => {
+      try {
+        console.log(chalk.green("Running the backup process..."));
+        execSync("pm2 start src/index.mjs --name dbbackup");
+        console.log(chalk.green("Backup process completed successfully!"));
+      } catch (error) {
+        console.log(chalk.red("Failed to run the backup process!"));
+        console.log(chalk.red(error.message));
+      }
+    };
+
+    // Schedule the backup process
+    cron.schedule(cronSchedule, () => {
+      console.log(
+        chalk.green(`Scheduled backup process running at: ${new Date()}`)
+      );
+      backupProcess();
+    });
+
+    console.log(
+      chalk.green(`Cron job scheduled with expression: ${cronSchedule}`)
+    );
+
+    // Keep the process running
+    setInterval(() => {}, 1000);
   });
 
 program.parse(process.argv);
