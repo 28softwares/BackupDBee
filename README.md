@@ -40,7 +40,7 @@ crontab -e
 _OR, you can use process managers as_
 
 ```
-pm2 start src/index.js --name dbbackup --cron "* * * * *"
+pm2 start src/index.mjs --name dbbackup --cron "* * * * *"
 ```
 
 ## Feel Free To Contribute 👌

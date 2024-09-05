@@ -40,8 +40,8 @@ export default async (fileName: string, fileContent: any) => {
     const s3Client = S3ClientSingleton.getInstance();
     // Upload the file
     const response = await s3Client.send(command);
-    console.log("File uploaded successfully:", response);
+    console.log("[+] File uploaded successfully:", response);
   } catch (err) {
-    console.error("Error uploading file:", err);
+    console.error("[-] Error uploading file:", err);
   }
 };
