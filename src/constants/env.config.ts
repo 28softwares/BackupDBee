@@ -8,7 +8,7 @@ class EnvConfig {
   public static MAIL_USER = process.env.MAIL_USER as string;
   public static MAIL_PASSWORD = process.env.MAIL_PASSWORD as string;
   //Multiple emails
-  public static TO_EMAIL = process.env.TO_EMAIL as string;
+  public static CC_MAIL = process.env.CC_MAIL as string;
   //BACKUP_CONFIG
   public static BACKUP_DEST = process.env.BACKUP_DEST as BackupDest;
 
