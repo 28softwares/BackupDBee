@@ -46,7 +46,7 @@ const handleDumpFailure = (
 
 const finalizeBackup = async (dumpFilePath: string, databaseName: string) => {
   const compressedFilePath = `${dumpFilePath}.zip`;
-
+  console.log("compressedFilePath", compressedFilePath);
   try {
     await execAsync(`zip -j ${compressedFilePath} ${dumpFilePath}`);
 

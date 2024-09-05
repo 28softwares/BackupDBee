@@ -1,4 +1,3 @@
- 
 import { createTransport } from "nodemailer";
 import EnvConfig from "../constants/env.config";
 import Print from "../constants/Print";
@@ -31,10 +30,10 @@ const validate = () => {
 export const sendMail = async (file: any) => {
   console.log("validating mail");
   validate();
-  const recipients = EnvConfig.CC_MAIL.split(',');
+  const recipients = EnvConfig.CC_MAIL?.split(",");
   return await transporter.sendMail({
     from: EnvConfig.MAIL_USER,
-    to: recipients.join(','),
+    to: [EnvConfig.MAIL_USER, recipients && recipients.join(",")],
     html: "<h1>Date : " + new Date() + "</h1>",
     subject: `Backups`,
     attachments: [{ path: file }],
