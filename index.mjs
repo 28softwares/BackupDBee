@@ -356,32 +356,14 @@ program
     }
     const cronSchedule = cmd.cron || "0 0 * * *"; // Default: once per day
 
-    // Define the backup process
-    const backupProcess = () => {
-      try {
-        console.log(chalk.green("Running the backup process..."));
-        execSync("pm2 start src/index.mjs --name dbbackup");
-        console.log(chalk.green("Backup process completed successfully!"));
-      } catch (error) {
-        console.log(chalk.red("Failed to run the backup process!"));
-        console.log(chalk.red(error.message));
-      }
-    };
-
-    // Schedule the backup process
-    cron.schedule(cronSchedule, () => {
-      console.log(
-        chalk.green(`Scheduled backup process running at: ${new Date()}`)
-      );
-      backupProcess();
-    });
+    execSync(
+      `pm2 start src/index.mjs --name dbbackup --cron "${cronSchedule}"`
+    );
+    execSync("pm2 save");
 
     console.log(
       chalk.green(`Cron job scheduled with expression: ${cronSchedule}`)
     );
-
-    // Keep the process running
-    setInterval(() => {}, 1000);
   });
 
 program.parse(process.argv);
