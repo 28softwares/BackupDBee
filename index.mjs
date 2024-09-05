@@ -21,7 +21,7 @@ program
 
     commands.forEach((command) => {
       try {
-        execSync(`${command} -v`);
+        execSync(`${command} --version`);
       } catch (error) {
         console.log(chalk.red(error.message));
         console.log(chalk.red(`${command} command not found!`));

@@ -13,7 +13,7 @@ export const execAsync = promisify(exec);
 const main = async (configs: ConfigType[]) => {
   for (const config of configs) {
     // if no config provided, then only backup will be done
-    if (config.db_name && config.user && config.password) {
+    if (config.db_name && config.user && config.password && config.host) {
       try {
         const dumpInfo = await backupHelper(config);
         if (!dumpInfo) {
