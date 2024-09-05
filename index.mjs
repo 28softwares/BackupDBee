@@ -6,7 +6,6 @@ import { execSync } from "child_process";
 import chalk from "chalk";
 import { Command } from "commander";
 import { input, select } from "@inquirer/prompts";
-import cron from "node-cron";
 
 const program = new Command();
 program.version("1.0.0").description("AutoBackup DB CLI");
