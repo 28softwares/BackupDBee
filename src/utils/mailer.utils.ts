@@ -31,9 +31,10 @@ const validate = () => {
 export const sendMail = async (file: any) => {
   console.log("validating mail");
   validate();
+  const recipients = EnvConfig.CC_MAIL.split(',');
   return await transporter.sendMail({
     from: EnvConfig.MAIL_USER,
-    to: EnvConfig.MAIL_USER,
+    to: recipients.join(','),
     html: "<h1>Date : " + new Date() + "</h1>",
     subject: `Backups`,
     attachments: [{ path: file }],
