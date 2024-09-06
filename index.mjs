@@ -191,7 +191,7 @@ AWS_REGION=${region}`;
       process.exit(1);
     }
 
-    execSync("pnpm install && pnpm start");
+    // execSync("pnpm install && pnpm start");
   });
 
 program
@@ -340,6 +340,27 @@ program
       console.log(chalk.red(error.message));
       process.exit(1);
     }
+  });
+
+program
+  .command("run")
+  .description("Run the backup process with cron scheduling")
+  .option("--cron <schedule>", "Cron schedule (default is once per day)")
+  .action((cmd) => {
+    // Check if .env file exists
+    if (!fs.existsSync(".env")) {
+      console.log(chalk.red("Environment variables file not found!"));
+      console.log(chalk.red("Please run the install command first!"));
+      process.exit(1);
+    }
+    const cronSchedule = cmd.cron || "0 0 * * *"; // Default: once per day
+
+    execSync(`pm2 start run-ts.sh  --name dbbackup --cron "${cronSchedule}"`);
+    execSync("pm2 save");
+
+    console.log(
+      chalk.green(`Cron job scheduled with expression: ${cronSchedule}`)
+    );
   });
 
 program.parse(process.argv);
