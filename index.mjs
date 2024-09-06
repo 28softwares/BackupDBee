@@ -191,7 +191,7 @@ AWS_REGION=${region}`;
       process.exit(1);
     }
 
-    execSync("pnpm install && pnpm start");
+    // execSync("pnpm install && pnpm start");
   });
 
 program
@@ -355,9 +355,7 @@ program
     }
     const cronSchedule = cmd.cron || "0 0 * * *"; // Default: once per day
 
-    execSync(
-      `pm2 start src/index.mjs --name dbbackup --cron "${cronSchedule}"`
-    );
+    execSync(`pm2 start run-ts.sh  --name dbbackup --cron "${cronSchedule}"`);
     execSync("pm2 save");
 
     console.log(
