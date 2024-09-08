@@ -1,8 +1,9 @@
-import { checkbox, input, password, select } from "@inquirer/prompts";
+import { checkbox, input, password } from "@inquirer/prompts";
 import chalk from "chalk";
 import fs from "fs";
 import { Command } from "commander";
 import process from "process";
+import { execSync } from "child_process";
 
 const findAndReplace = (filename, searchString, newString) => {
   fs.readFile(filename, "utf8", (err, data) => {
@@ -12,7 +13,7 @@ const findAndReplace = (filename, searchString, newString) => {
     }
     const lines = data.split("\n");
     let modified = false;
-    
+
     const updatedLines = lines.map((line) => {
       if (line.includes(searchString)) {
         modified = true;
@@ -107,8 +108,8 @@ const selectBackupDestination = async () => {
       if (selected.length === 3) {
         return "You cannot select Gmail, AWS, and None at the same time.";
       }
-      const none = selected.find(item => item.value === 'NONE');
-      if (none&&selected.length>1) {
+      const none = selected.find((item) => item.value === "NONE");
+      if (none && selected.length > 1) {
         return "You cannot select other option with none";
       }
 
@@ -168,20 +169,20 @@ const selectNotificationDestination = async () => {
         description: "No notification will be sent",
       },
     ],
-    validate:function (selected) {
+    validate: function (selected) {
       if (selected.length === 0) {
         return "Please select at least one option.";
       }
       if (selected.length === 4) {
         return "You cannot select Discord, Slack, Custom and None at the same time.";
       }
-      const none = selected.find(item => item.value === 'NONE');
+      const none = selected.find((item) => item.value === "NONE");
 
-      if (none&&selected.length>1) {
+      if (none && selected.length > 1) {
         return "You cannot select other option with none";
       }
 
-      return true
+      return true;
     },
   });
   return notificationDestination;
@@ -234,7 +235,7 @@ const setNotificationDestination = async () => {
 };
 
 const selectDatabase = async () => {
-  const database = await select({
+  const database = await checkbox({
     message: chalk.magenta.underline("Add new database"),
     theme: {
       prefix: chalk.greenBright("$"),
@@ -243,6 +244,12 @@ const selectDatabase = async () => {
       { name: "Postgres", value: "POSTGRES" },
       { name: "MySQl", value: "MYSQL" },
     ],
+    validate: (selected) => {
+      if (selected.length === 0) {
+        return "Please select at least one option.";
+      }
+      return true;
+    },
   });
   return database;
 };
@@ -288,9 +295,12 @@ const addDatabaseVariables = async (databaseType) => {
 
 const addDatabase = async () => {
   const databaseType = await selectDatabase();
-  if (databaseType === "POSTGRES") {
+  if (databaseType === "POSTGRES") {  
     await addDatabaseVariables("POSTGRES");
+  } else if (databaseType === "MYSQL") {
+    await addDatabaseVariables("MYSQL");
   } else {
+    await addDatabaseVariables("POSTGRES");
     await addDatabaseVariables("MYSQL");
   }
 };
@@ -299,27 +309,32 @@ const answerTheme = {
   prefix: chalk.greenBright(">>>>"),
 };
 
-// const verifyDependency = () => {
-//   const commands = ["zip", "pg_dump", "mysqldump", "pnpm", "node"];
-//   commands.forEach((cmd) => {
-//     try {
-//       execSync(`${cmd} --version`);
-//     } catch (error) {
-//       console.log(chalk.red(error.message));
-//       console.log(chalk.red(`${cmd} command not found!`));
-//       process.exit(1);
-//     }
-//   });
-// };
+const verifyDependency = () => {
+  const commands = ["zip", "pg_dump", "mysqldump", "pnpm", "node"];
+  commands.forEach((cmd) => {
+    try {
+      execSync(`${cmd} --version`);
+      console.log(chalk.green(`${cmd}already installed`));
+    } catch (error) {
+      console.log(chalk.red(error.message));
+      console.log(chalk.red(`${cmd} command not found!`));
+      process.exit(1);
+    }
+  });
+};
 
 const program = new Command();
 
 program
-  .option(
-    "--g ,--generate",
-    "Generate .env file settings required environmental variables"
+  .option("--v, --verify", "Verify required dependency")
+  .option("--g ,--generate","Generate .env file settings required environmental variables"
   )
-  .option("--u, --update", "Update .env configurations");
+  // Update env variables 
+  .option("--ug, --update_gmail", "Update gmail credential")
+  .option("--ud, --update_discord", "Update discord webhook url")
+  .option("--us, --update_slack", "Update slack webhook url")
+  .option("--uc, --update_custom", "Update custom webhook url")
+
 program.parse(process.argv);
 
 const options = program.opts();
@@ -330,6 +345,18 @@ const runCli = async () => {
     await setBackupDestination();
     await setNotificationDestination();
   }
-};
+  if (options.verify) {
+    verifyDependency();
+  }
+  if (options.update_gmail) {
+    updateGmailVariables()
+  }
+  if (options.update_discord) {
+    updateWebhookUrl("DISCORD")
+  }
+  if (options.update_custom) {
+    updateWebhookUrl("CUSTOM")
+  }
+};  
 
 runCli();
