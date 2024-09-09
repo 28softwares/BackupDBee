@@ -1,10 +1,22 @@
-import { checkbox, input, password } from "@inquirer/prompts";
+import { checkbox, input, password, select } from "@inquirer/prompts";
 import chalk from "chalk";
 import fs from "fs";
 import { Command } from "commander";
 import process from "process";
 import { execSync } from "child_process";
 
+
+const createFile=(filename) =>{
+  fs.open(filename,'r',function(err){
+    if (err) {
+      fs.writeFile(filename, '', function(err) {
+          if(err) {
+              console.log(err);
+          }
+      });
+    } 
+  });
+}
 const findAndReplace = (filename, searchString, newString) => {
   fs.readFile(filename, "utf8", (err, data) => {
     if (err) {
@@ -235,7 +247,7 @@ const setNotificationDestination = async () => {
 };
 
 const selectDatabase = async () => {
-  const database = await checkbox({
+  const database = await select({
     message: chalk.magenta.underline("Add new database"),
     theme: {
       prefix: chalk.greenBright("$"),
@@ -243,6 +255,7 @@ const selectDatabase = async () => {
     choices: [
       { name: "Postgres", value: "POSTGRES" },
       { name: "MySQl", value: "MYSQL" },
+      { name: "Both", value: "BOTH" },
     ],
     validate: (selected) => {
       if (selected.length === 0) {
@@ -293,15 +306,15 @@ const addDatabaseVariables = async (databaseType) => {
   );
 };
 
-const addDatabase = async () => {
-  const databaseType = await selectDatabase();
-  if (databaseType === "POSTGRES") {  
+
+const addDatabase = async (databaseType) => {
+  if (databaseType === "BOTH") {
     await addDatabaseVariables("POSTGRES");
-  } else if (databaseType === "MYSQL") {
+    await addDatabaseVariables("MYSQL");
+  }else if (databaseType === "MYSQL") {
     await addDatabaseVariables("MYSQL");
   } else {
     await addDatabaseVariables("POSTGRES");
-    await addDatabaseVariables("MYSQL");
   }
 };
 
@@ -327,13 +340,15 @@ const program = new Command();
 
 program
   .option("--v, --verify", "Verify required dependency")
-  .option("--g ,--generate","Generate .env file settings required environmental variables"
+  .option(
+    "--g ,--generate",
+    "Generate .env file settings required environmental variables"
   )
-  // Update env variables 
+  // Update env variables
   .option("--ug, --update_gmail", "Update gmail credential")
   .option("--ud, --update_discord", "Update discord webhook url")
   .option("--us, --update_slack", "Update slack webhook url")
-  .option("--uc, --update_custom", "Update custom webhook url")
+  .option("--uc, --update_custom", "Update custom webhook url");
 
 program.parse(process.argv);
 
@@ -341,7 +356,8 @@ const options = program.opts();
 
 const runCli = async () => {
   if (options.generate) {
-    await addDatabase();
+    await createFile('.env')
+    await addDatabase(await selectDatabase());
     await setBackupDestination();
     await setNotificationDestination();
   }
@@ -349,14 +365,14 @@ const runCli = async () => {
     verifyDependency();
   }
   if (options.update_gmail) {
-    updateGmailVariables()
+    updateGmailVariables();
   }
   if (options.update_discord) {
-    updateWebhookUrl("DISCORD")
+    updateWebhookUrl("DISCORD");
   }
   if (options.update_custom) {
-    updateWebhookUrl("CUSTOM")
+    updateWebhookUrl("CUSTOM");
   }
-};  
+};
 
 runCli();
