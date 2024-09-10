@@ -22,7 +22,8 @@
     "dotenv": "^16.4.5",
     "nodemailer": "^6.9.14",
     "ts-node": "^10.9.2",
-    "winston": "^3.14.1"
+    "winston": "^3.14.1",
+    "yaml": "^2.5.1"
   },
   "devDependencies": {
     "@eslint/js": "^9.9.0",

@@ -1,6 +1,6 @@
 import { createWriteStream, existsSync, mkdirSync, rmSync } from "fs";
 import * as fs from "fs";
-import Log from "../constants/Log";
+import Log from "../constants/log";
 import path from "path";
 import { ConfigType, DumpInfo, DumpType } from "../@types/types";
 import { execAsync } from "..";
@@ -10,6 +10,7 @@ import EnvConfig from "../constants/env.config";
 import uploadToS3 from "./s3.utils";
 import { handleMysqlDump } from "../dbs/mysql";
 import { handlePostgresDump } from "../dbs/postgres";
+import { Destinations } from "../@types/config";
 
 const ensureDirectory = (dirPath: string) => {
   if (!existsSync(dirPath)) {
@@ -36,7 +37,9 @@ const handleDumpFailure = (
   databaseName: string,
   dumpFilePath: string
 ) => {
-  console.error(`[-] Dump process failed with code ${code}. Error: ${errorMsg}`);
+  console.error(
+    `[-] Dump process failed with code ${code}. Error: ${errorMsg}`
+  );
   Log.error(`Cannot backup ${databaseName}`);
   if (existsSync(dumpFilePath)) {
     rmSync(dumpFilePath);
@@ -44,25 +47,33 @@ const handleDumpFailure = (
   }
 };
 
-const finalizeBackup = async (dumpFilePath: string, databaseName: string) => {
+const finalizeBackup = async (
+  dumpFilePath: string,
+  databaseName: string,
+  destinations: Destinations
+) => {
   const compressedFilePath = `${dumpFilePath}.zip`;
   console.log("compressedFilePath", compressedFilePath);
   try {
     await execAsync(`zip -j ${compressedFilePath} ${dumpFilePath}`);
 
-    switch (EnvConfig.BACKUP_DEST) {
-      case "GMAIL":
-        await sendMail(compressedFilePath);
-        break;
-      case "S3_BUCKET":
-        await uploadToS3(
-          dumpFilePath.split("/").pop() + ".zip",
-          fs.readFileSync(compressedFilePath)
-        );
-        break;
+    if (destinations.email.enabled) {
+      await sendMail(compressedFilePath);
+    }
 
-      default:
-        break;
+    if (destinations.s3_bucket.enabled) {
+      await uploadToS3(
+        dumpFilePath.split("/").pop() + ".zip",
+        fs.readFileSync(compressedFilePath)
+      );
+    }
+
+    console.log("backupDir destination local path", destinations.local.path);
+    if (destinations.local.enabled) {
+      const backupDir = path.resolve(destinations.local.path);
+      console.log("backupDir", backupDir);
+      ensureDirectory(backupDir);
+      fs.copyFileSync(compressedFilePath, path.resolve(backupDir, compressedFilePath.split("/").pop() as string));
     }
 
     return compressedFilePath;
@@ -75,7 +86,10 @@ const finalizeBackup = async (dumpFilePath: string, databaseName: string) => {
   }
 };
 
-const backupHelper = async (data: ConfigType): Promise<DumpInfo | null> => {
+const backupHelper = async (
+  data: ConfigType,
+  destinations: Destinations
+): Promise<DumpInfo | null> => {
   const dumps: DumpType[] = [] as DumpType[];
   let errorMsg: string | null = null;
 
@@ -96,7 +110,7 @@ const backupHelper = async (data: ConfigType): Promise<DumpInfo | null> => {
 
   // prepare for backup
   const timeStamp = Date.now().toString();
-  const backupDir = path.resolve("backups");
+  const backupDir = path.resolve("tmp");
   ensureDirectory(backupDir);
 
   return new Promise((resolve, reject) => {
@@ -107,7 +121,7 @@ const backupHelper = async (data: ConfigType): Promise<DumpInfo | null> => {
 
       dumpedContent.stdout.pipe(writeStream);
 
-      dumpedContent.stderr.on("data", (chunk) => {
+      dumpedContent.on("data", (chunk) => {
         errorMsg = chunk.toString();
         Log.error(errorMsg ?? "Error occurred while dumping");
       });
@@ -127,13 +141,14 @@ const backupHelper = async (data: ConfigType): Promise<DumpInfo | null> => {
         console.log(`[+] Backup of ${databaseName} completed successfully`);
         const compressedFilePath = await finalizeBackup(
           dumpFilePath,
-          databaseName
+          databaseName,
+          destinations
         );
         if (compressedFilePath) {
           // Remove locally created dump files.
           console.log(`[+] Removing dump file.. ${dumpFilePath}`);
           rmSync(dumpFilePath);
-          rmSync(`${dumpFilePath}.zip`);
+          rmSync(compressedFilePath);
 
           resolve({
             databaseName,

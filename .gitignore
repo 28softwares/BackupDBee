@@ -11,3 +11,4 @@ backups/
 .zip
 .vscode/
 limited_dump.sql
+tmp/

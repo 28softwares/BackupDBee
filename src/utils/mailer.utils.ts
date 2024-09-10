@@ -1,6 +1,6 @@
 import { createTransport } from "nodemailer";
 import EnvConfig from "../constants/env.config";
-import Log from "../constants/Log";
+import Log from "../constants/log";
 
 const transporter = createTransport({
   host: "smtp.gmail.com",
