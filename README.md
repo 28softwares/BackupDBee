@@ -46,6 +46,8 @@ pm2 start src/index.mjs --name dbbackup --cron "* * * * *"
 
 ## Usage
 ```
+node index.mjs --help
+
 Usage: index [options]
 
 Options:
