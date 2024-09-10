@@ -43,6 +43,26 @@ _OR, you can use process managers as_
 pm2 start src/index.mjs --name dbbackup --cron "* * * * *"
 ```
 
+
+## Usage
+```
+Usage: index [options]
+
+Options:
+  --v, --verify                            Verify required dependency
+  --run, --run_backup                      Run backup
+  --cron,--corn-schedule                   Cron schedule (default:once per day) (format:0 0 * * *)
+  --g ,--generate                          Generate .env file settings required environmental variables
+  --update-pg, --update_postgres_database  Update Postgres database credentials
+  --update-sql, --update_mysql_database    update MySQL database credentials
+  --ug, --update_gmail                     Update gmail credential
+  --ud, --update_discord                   Update discord webhook url
+  --us, --update_slack                     Update slack webhook url
+  --uc, --update_custom                    Update custom webhook url
+    -h, --help                             display help for command
+```
+
+
 ## Feel Free To Contribute 👌
 
 Customize it further based on your tool’s specific features and benefits! PR are welcome.

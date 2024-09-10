@@ -250,7 +250,7 @@ const selectDatabase = async () => {
   const database = await select({
     message: chalk.magenta.underline("Add new database"),
     theme: {
-      prefix: chalk.greenBright("$"),
+      prefix: chalk.greenBright("$")
     },
     choices: [
       { name: "Postgres", value: "POSTGRES" },
@@ -304,6 +304,15 @@ const addDatabaseVariables = async (databaseType) => {
     `${databaseType}_DB_PASSWORD`,
     `${databaseType}_DB_PASSWORD=${dbPassword}`
   );
+  const dbPort = await input({
+    message: `Enter your ${databaseType.toLowerCase()} database port:`,
+    theme: answerTheme,
+  });
+  findAndReplace(
+    ".env",
+    `${databaseType}_DB_PORT`,
+    `${databaseType}_DB_PORT=${dbPort}`
+  );
 };
 
 
@@ -340,21 +349,46 @@ const program = new Command();
 
 program
   .option("--v, --verify", "Verify required dependency")
+  .option("--run, --run_backup", "Run backup")
+  .option("--cron,--corn-schedule", "Cron schedule (default:once per day) (format:0 0 * * *)")
   .option(
     "--g ,--generate",
     "Generate .env file settings required environmental variables"
   )
   // Update env variables
+  .option("--update-pg, --update_postgres_database", "Update Postgres database credentials")
+  .option("--update-sql, --update_mysql_database", "update MySQL database credentials")
   .option("--ug, --update_gmail", "Update gmail credential")
   .option("--ud, --update_discord", "Update discord webhook url")
   .option("--us, --update_slack", "Update slack webhook url")
-  .option("--uc, --update_custom", "Update custom webhook url");
+  .option("--uc, --update_custom", "Update custom webhook url")
+ 
 
 program.parse(process.argv);
 
 const options = program.opts();
 
 const runCli = async () => {
+  if (!fs.existsSync(".env")) {
+    console.log(chalk.red("Environment variables file not found!"));
+    console.log(chalk.red("Please run 'node index.mjs --generate'"));
+    process.exit(1);
+  }
+  if (options.run_backup) {
+    execSync(`pnpm start`)
+    console.log(chalk.green(`[+] Backup successful and stored inside 'backups' directory`))
+  }
+  if (options.corn_schedule){
+    const cronSchedule = "0 0 * * *"; // Default: once per day
+
+    execSync(`pm2 start run-ts.sh  --name dbbackup --cron "${cronSchedule}"`);
+    execSync("pm2 save");
+
+    console.log(
+      chalk.green(`Cron job scheduled with expression: ${cronSchedule}`)
+    );
+  } 
+
   if (options.generate) {
     await createFile('.env')
     await addDatabase(await selectDatabase());
@@ -362,16 +396,25 @@ const runCli = async () => {
     await setNotificationDestination();
   }
   if (options.verify) {
-    verifyDependency();
+    await verifyDependency();
   }
   if (options.update_gmail) {
-    updateGmailVariables();
+    await updateGmailVariables();
   }
   if (options.update_discord) {
-    updateWebhookUrl("DISCORD");
+    await updateWebhookUrl("DISCORD");
   }
   if (options.update_custom) {
-    updateWebhookUrl("CUSTOM");
+    await updateWebhookUrl("CUSTOM");
+  }
+  if (options.update_slack) {
+    await updateWebhookUrl("SLACK");
+  }
+  if (options.update_postgres_database) {
+    await addDatabase('POSTGRES')
+  }
+  if (options.update_mysql_database) {
+    await addDatabase('MYSQL')
   }
 };
 

@@ -8,7 +8,7 @@ export type ConfigType = {
   user?: string;
   password?: string;
   type: "postgres" | "mysql";
-  port?: number;
+  port?: string;
 };
 
 export interface DumpType {
