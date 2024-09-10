@@ -4,7 +4,7 @@ import { Notifier } from "./notifier";
 export class CustomNotifier implements Notifier {
   private webhookUrl: string;
   private message: string;
-  
+
   constructor(webhookUrl: string, message: string) {
     this.webhookUrl = webhookUrl;
     this.message = message;
@@ -48,13 +48,14 @@ export class CustomNotifier implements Notifier {
           ).hostname.replace(".com", "")}`
         );
       }
-    } catch (error) {
-      Log.error(`Error sending notification: ${error}`);
-      console.error(`[-] Error sending notification: ${error}`);
+    } catch (error: unknown) {
+      if (error instanceof Error) {
+        Log.error(`Error sending notification: ${error.message}`);
+        console.error(`[-] Error sending notification: ${error.message}`);
+      } else {
+        Log.error(`Unknown error occurred.`);
+        console.error(`[-] Unknown error occurred.`);
+      }
     }
-  }
-
-  sendNotification(): void {
-    this.notify();
   }
 }

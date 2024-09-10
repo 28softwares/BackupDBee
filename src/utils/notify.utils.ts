@@ -44,10 +44,17 @@ function notifyAllMedium(notifiers: Notifier[]) {
     for (const notifier of notifiers) {
       try {
         notifier.validate();
-        notifier.sendNotification();
-      } catch (error: any) {
-        Log.error(`Validation or notification error: ${error.message}`);
-        console.error(`[-] Validation or notification error: ${error.message}`);
+        await notifier.notify();
+      } catch (error: unknown) {
+        if (error instanceof Error) {
+          Log.error(`Validation or notification Error: ${error.message}`);
+          console.error(
+            `[-] Validation or notification Error: ${error.message}`
+          );
+        } else {
+          Log.error(`Unknown error occurred.`);
+          console.error(`[-] Unknown error occurred.`);
+        }
       }
     }
   };

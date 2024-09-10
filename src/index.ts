@@ -3,7 +3,7 @@ import { exec } from "child_process";
 import { ConfigType } from "./@types/types";
 import { promisify } from "util";
 import Log from "./constants/log";
-import { sendNotification } from "./utils/notify.utils";
+// import { sendNotification } from "./utils/notify.utils";
 import { readFileSync } from "fs";
 import * as yaml from "yaml";
 import { DataBeeConfig, Destinations } from "./@types/config";

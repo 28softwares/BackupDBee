@@ -6,7 +6,6 @@ import { ConfigType, DumpInfo, DumpType } from "../@types/types";
 import { execAsync } from "..";
 import { sendMail } from "./mailer.utils";
 import "dotenv/config";
-import EnvConfig from "../constants/env.config";
 import uploadToS3 from "./s3.utils";
 import { handleMysqlDump } from "../dbs/mysql";
 import { handlePostgresDump } from "../dbs/postgres";

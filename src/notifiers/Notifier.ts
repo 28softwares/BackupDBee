@@ -1,5 +1,4 @@
 export interface Notifier {
-  sendNotification(): void;
   validate(): void;
   notify(): Promise<void>;
 }
