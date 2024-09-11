@@ -13,8 +13,8 @@ Effortlessly manage your database backups at one go. This easy-to-use tool suppo
 ## Clone the project 📦
 
 ```
-git clone https://github.com/28softwares/autobackup-db-and-email.git
-cd autobackup-db-and-email
+git clone https://github.com/28softwares/backupdbee.git
+cd backupdbee
 ```
 
 ### Initial Setup
@@ -47,14 +47,11 @@ pm2 start src/index.mjs --name dbbackup --cron "* * * * *"
 
 Customize it further based on your tool’s specific features and benefits! PR are welcome.
 
----
-
-## Todos ✅
-
-- [ ] (Under progress) To make project CLI Based (Since we have `scripts/dump_data_for_test.sh` which we have to do manually, but if we can make cli based from `index.sh` then it will be more user friendly; by providing flags)
+Current work updates can be found at:
+[https://github.com/orgs/28softwares/projects/1](https://github.com/orgs/28softwares/projects/1)
 
 ## Contributors 🤝
 
-<a href = "https://github.com/28softwares/autobackup-db-and-email">
-  <img src = "https://contrib.rocks/image?repo=28softwares/autobackup-db-and-email"/>
+<a href = "https://github.com/28softwares/backupdbee">
+  <img src = "https://contrib.rocks/image?repo=28softwares/backupdbee"/>
 </a>
