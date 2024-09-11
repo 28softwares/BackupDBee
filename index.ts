@@ -18,7 +18,7 @@ program
   .action(install);
 
 program
-  .command("update-backup-destinations")
+  .command("update-backup-destination")
   .alias("ubd")
   .description("Update backup destinations")
   .action(
