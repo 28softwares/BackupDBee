@@ -12,3 +12,4 @@ backups/
 .vscode/
 limited_dump.sql
 tmp/
+backupdbee.yaml

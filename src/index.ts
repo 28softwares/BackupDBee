@@ -78,7 +78,7 @@ const main = async (configs: ConfigType[], destinations: Destinations) => {
   }
 };
 
-function parseConfigFile(path: string = "config.yaml"): DataBeeConfig {
+function parseConfigFile(path: string = "backupdbee.yaml"): DataBeeConfig {
   const configFile = readFileSync(path, "utf-8");
   const yamlConfig = yaml.parse(configFile) as DataBeeConfig;
   return yamlConfig;
