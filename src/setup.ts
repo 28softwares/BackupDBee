@@ -1,18 +1,19 @@
 import { DataBeeConfig, Destinations, Notifications } from "./@types/config";
 import { ConfigType } from "./@types/types";
 import Log from "./constants/log";
-import { validateLocalDestination } from "./validators/destination";
 import {
   validateEmailDestination,
-  validateEmailNotification,
-} from "./validators/email";
+  validateLocalDestination,
+  validateS3Destination,
+} from "./validators/destination";
+
 import {
   validateDiscordNotification,
   validateSlackNotification,
   validateTelegramNotification,
   validateWebhookNotification,
+  validateEmailNotification,
 } from "./validators/notification";
-import { validateS3Destination } from "./validators/s3";
 
 export function getDefaultPortOfDBType(type: string): number {
   switch (type) {
@@ -140,7 +141,9 @@ export function setupNotifications(
 
   if (dataBeeConfig?.notifications?.custom?.enabled) {
     if (
-      validateWebhookNotification(dataBeeConfig?.notifications?.custom?.webhook_url)
+      validateWebhookNotification(
+        dataBeeConfig?.notifications?.custom?.webhook_url
+      )
     ) {
       notifications.custom = dataBeeConfig?.notifications?.custom;
     }

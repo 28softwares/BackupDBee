@@ -1,3 +1,4 @@
+import { Email } from "../@types/config";
 import Log from "../constants/log";
 
 export function validateDiscordNotification(webhook_url: string): boolean {
@@ -33,5 +34,19 @@ export function validateTelegramNotification(webHook: string, webHookSecret: str
     Log.error("Telegram webhook secret not set in the config file.");
     return false;
   }
+  return true;
+}
+
+export function validateEmailNotification(email: Email): boolean {
+  if (!email.from) {
+    Log.error("Email from address not set in the config file.");
+    return false;
+  }
+
+  if (!email.to.length) {
+    Log.error("Email to address not set in the config file.");
+    return false;
+  }
+
   return true;
 }
