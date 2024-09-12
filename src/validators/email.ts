@@ -21,3 +21,18 @@ export function validateEmailDestination(email?: Email): boolean {
   }
   return true;
 }
+
+
+export function validateEmailNotification(email: Email): boolean {
+  if (!email.from) {
+    Log.error("Email from address not set in the config file.");
+    return false;
+  }
+
+  if (!email.to.length) {
+    Log.error("Email to address not set in the config file.");
+    return false;
+  }
+
+  return true;
+}
