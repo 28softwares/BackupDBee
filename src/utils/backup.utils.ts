@@ -1,12 +1,8 @@
 import { createWriteStream, existsSync, mkdirSync, rmSync } from "fs";
-import * as fs from "fs";
 import Log from "../constants/log";
 import path from "path";
 import { ConfigType, DumpInfo, DumpType } from "../@types/types";
 import { execAsync } from "..";
-import { sendMail } from "./mailer.utils";
-import "dotenv/config";
-import uploadToS3 from "./s3.utils";
 import { handleMysqlDump } from "../dbs/mysql";
 import { handlePostgresDump } from "../dbs/postgres";
 import { Destinations } from "../@types/config";
