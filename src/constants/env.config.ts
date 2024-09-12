@@ -36,6 +36,9 @@ class EnvConfig {
   public static AWS_SECRET_ACCESS_KEY = process.env.AWS_SECRET_ACCESS_KEY as string;
   public static AWS_S3_BUCKET_NAME = process.env.AWS_S3_BUCKET_NAME as string;
   public static AWS_REGION = process.env.AWS_REGION as string;
+
+  // Backup Configuration
+  public static CONFIG = process.env.CONFIG as string;
 }
 
 export default EnvConfig;
