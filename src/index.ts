@@ -38,7 +38,6 @@ const main = async (
           Log.error("Backup failed.");
           return;
         }
-        console.log(destinations);
         await sendNotification(dumpInfo, notifications);
       } catch (e: unknown) {
         Log.error("Backup failed." + e);
