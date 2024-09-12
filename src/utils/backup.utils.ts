@@ -10,6 +10,7 @@ import uploadToS3 from "./s3.utils";
 import { handleMysqlDump } from "../dbs/mysql";
 import { handlePostgresDump } from "../dbs/postgres";
 import { Destinations } from "../@types/config";
+import { sendToDestinations } from "./location.utils";
 
 const ensureDirectory = (dirPath: string) => {
   if (!existsSync(dirPath)) {
@@ -49,6 +50,7 @@ const handleDumpFailure = (
 const finalizeBackup = async (
   dumpFilePath: string,
   databaseName: string,
+  databaseType: string,
   destinations: Destinations
 ) => {
   const compressedFilePath = `${dumpFilePath}.zip`;
@@ -56,24 +58,16 @@ const finalizeBackup = async (
   try {
     await execAsync(`zip -j ${compressedFilePath} ${dumpFilePath}`);
 
-    if (destinations.email.enabled) {
-      await sendMail(compressedFilePath);
-    }
-
-    if (destinations.s3_bucket.enabled) {
-      await uploadToS3(
-        dumpFilePath.split("/").pop() + ".zip",
-        fs.readFileSync(compressedFilePath)
-      );
-    }
-
-    console.log("backupDir destination local path", destinations.local.path);
-    if (destinations.local.enabled) {
-      const backupDir = path.resolve(destinations.local.path);
-      console.log("backupDir", backupDir);
-      ensureDirectory(backupDir);
-      fs.copyFileSync(compressedFilePath, path.resolve(backupDir, compressedFilePath.split("/").pop() as string));
-    }
+    sendToDestinations(
+      {
+        databaseName,
+        compressedFilePath,
+        databaseType,
+        dumpFilePath,
+        dumpFileName: dumpFilePath.split("/").pop() as string,
+      },
+      destinations
+    );
 
     return compressedFilePath;
   } catch (err: unknown) {
@@ -141,6 +135,7 @@ const backupHelper = async (
         const compressedFilePath = await finalizeBackup(
           dumpFilePath,
           databaseName,
+          data.type,
           destinations
         );
         if (compressedFilePath) {
