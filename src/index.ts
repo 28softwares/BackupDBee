@@ -3,20 +3,25 @@ import { exec } from "child_process";
 import { ConfigType } from "./@types/types";
 import { promisify } from "util";
 import Log from "./constants/log";
-// import { sendNotification } from "./utils/notify.utils";
+import { sendNotification } from "./utils/notify.utils";
 import { readFileSync } from "fs";
 import * as yaml from "yaml";
-import { DataBeeConfig, Destinations } from "./@types/config";
+import { DataBeeConfig, Destinations, Notifications } from "./@types/config";
 import { validateDBConfig } from "./validators/config";
 import {
   getDefaultPortOfDBType,
   setupDBConfig,
   setupDestinations,
+  setupNotifications,
 } from "./setup";
 // Promisify exec to use with async/await
 export const execAsync = promisify(exec);
 
-const main = async (configs: ConfigType[], destinations: Destinations) => {
+const main = async (
+  configs: ConfigType[],
+  destinations: Destinations,
+  notifications: Notifications
+) => {
   for (const config of configs) {
     // if no config provided, then only backup will be done
     if (validateDBConfig(config)) {
@@ -29,10 +34,12 @@ const main = async (configs: ConfigType[], destinations: Destinations) => {
           Log.error("Backup failed.");
           return;
         }
-
-        // await sendNotification(EnvConfig.BACKUP_NOTIFICATION, {
-        //   databaseName: dumpInfo.databaseName,
-        // });
+        if (!dumpInfo.compressedFilePath) {
+          Log.error("Backup failed.");
+          return;
+        }
+        console.log(destinations);
+        await sendNotification(dumpInfo, notifications);
       } catch (e: unknown) {
         Log.error("Backup failed." + e);
       }
@@ -47,4 +54,8 @@ function parseConfigFile(path: string = "backupdbee.yaml"): DataBeeConfig {
 }
 
 const dataBeeConfig = parseConfigFile();
-main(setupDBConfig(dataBeeConfig), setupDestinations(dataBeeConfig));
+main(
+  setupDBConfig(dataBeeConfig),
+  setupDestinations(dataBeeConfig),
+  setupNotifications(dataBeeConfig)
+);

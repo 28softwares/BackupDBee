@@ -1,8 +1,17 @@
-import { DataBeeConfig, Destinations } from "./@types/config";
+import { DataBeeConfig, Destinations, Notifications } from "./@types/config";
 import { ConfigType } from "./@types/types";
 import Log from "./constants/log";
 import { validateLocalDestination } from "./validators/destination";
-import { validateEmailDestination } from "./validators/email";
+import {
+  validateEmailDestination,
+  validateEmailNotification,
+} from "./validators/email";
+import {
+  validateDiscordNotification,
+  validateSlackNotification,
+  validateTelegramNotification,
+  validateWebhookNotification,
+} from "./validators/notification";
 import { validateS3Destination } from "./validators/s3";
 
 export function getDefaultPortOfDBType(type: string): number {
@@ -71,4 +80,82 @@ export function setupDestinations(dataBeeConfig: DataBeeConfig): Destinations {
     }
   }
   return destinations;
+}
+
+export function setupNotifications(
+  dataBeeConfig: DataBeeConfig
+): Notifications {
+  if (
+    !dataBeeConfig?.notifications?.email?.enabled &&
+    !dataBeeConfig?.notifications?.discord?.enabled &&
+    !dataBeeConfig?.notifications?.slack?.enabled &&
+    !dataBeeConfig?.notifications?.custom?.enabled &&
+    !dataBeeConfig?.notifications?.telegram?.enabled
+  ) {
+    Log.error("No notifications are enabled in the config file.");
+    return {} as Notifications;
+  }
+  const notifications: Notifications = {
+    email: {
+      enabled: false,
+    },
+    discord: {
+      enabled: false,
+    },
+    slack: {
+      enabled: false,
+    },
+    custom: {
+      enabled: false,
+    },
+    telegram: {
+      enabled: false,
+    },
+  } as Notifications;
+
+  if (dataBeeConfig?.notifications?.email?.enabled) {
+    if (validateEmailNotification(dataBeeConfig?.notifications?.email)) {
+      notifications.email = dataBeeConfig?.notifications?.email;
+    }
+  }
+  if (dataBeeConfig?.notifications?.discord?.enabled) {
+    if (
+      validateDiscordNotification(
+        dataBeeConfig?.notifications?.discord?.webhook_url
+      )
+    ) {
+      notifications.discord = dataBeeConfig?.notifications?.discord;
+    }
+  }
+
+  if (dataBeeConfig?.notifications?.slack?.enabled) {
+    if (
+      validateSlackNotification(
+        dataBeeConfig?.notifications?.slack?.webhook_url
+      )
+    ) {
+      notifications.slack = dataBeeConfig?.notifications?.slack;
+    }
+  }
+
+  if (dataBeeConfig?.notifications?.custom?.enabled) {
+    if (
+      validateWebhookNotification(dataBeeConfig?.notifications?.custom?.webhook_url)
+    ) {
+      notifications.custom = dataBeeConfig?.notifications?.custom;
+    }
+  }
+
+  if (dataBeeConfig?.notifications?.telegram?.enabled) {
+    if (
+      validateTelegramNotification(
+        dataBeeConfig?.notifications?.telegram.web_hook,
+        dataBeeConfig?.notifications?.telegram.web_hook_secret
+      )
+    ) {
+      notifications.telegram = dataBeeConfig?.notifications?.telegram;
+    }
+  }
+
+  return notifications;
 }

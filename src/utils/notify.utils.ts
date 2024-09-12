@@ -1,34 +1,51 @@
-import { NotifyOnMedium } from "../@types/types";
+import { DumpInfo } from "../@types/types";
 import Log from "../constants/log";
-import EnvConfig from "../constants/env.config";
 import { CustomNotifier } from "../notifiers/custom_notifier";
-import { Notifier, NotifierOption } from "../notifiers/notifier";
+import { Notifier } from "../notifiers/notifier";
 import { SlackNotifier } from "../notifiers/slack_notifier";
 import { DiscordNotifier } from "../notifiers/discord_notifier";
+import { Notifications } from "../@types/config";
+import { NOTIFICATION } from "../constants/notifications";
 
 export const sendNotification = async (
-  mediums: string,
-  option: NotifierOption
+  dumpInfo: DumpInfo,
+  notifications: Notifications
 ) => {
-  const notify_on = mediums.split(",") as NotifyOnMedium[];
+  const notify_on = Object.keys(notifications)
+    .filter((key) => notifications[key as keyof Notifications].enabled)
+    .map((key) => key as keyof Notifications);
+
   const notifiers: Notifier[] = [];
   const message = `Backup completed successfully for database: ${
-    option.databaseName
+    dumpInfo.databaseName
   } at ${new Date()}`;
   for (const medium of notify_on) {
     switch (medium.trim().toUpperCase()) {
-      case "SLACK":
-        notifiers.push(new SlackNotifier(EnvConfig.SLACK_WEBHOOK_URL, message));
-        break;
-      case "DISCORD":
+      case NOTIFICATION.SLACK:
         notifiers.push(
-          new DiscordNotifier(EnvConfig.DISCORD_WEBHOOK_URL, message)
+          new SlackNotifier(notifications.slack.webhook_url, message)
         );
+
         break;
-      case "CUSTOM":
+      case NOTIFICATION.DISCORD:
         notifiers.push(
-          new CustomNotifier(EnvConfig.CUSTOM_WEBHOOK_URL, message)
+          new DiscordNotifier(notifications.discord.webhook_url, message)
         );
+
+        break;
+      case NOTIFICATION.CUSTOM:
+        notifiers.push(
+          new CustomNotifier(notifications.custom.webhook_url, message)
+        );
+
+        break;
+      case NOTIFICATION.TELEGRAM:
+        Log.warn("Telegram notification is not supported yet.");
+
+        break;
+      case NOTIFICATION.EMAIL:
+        Log.warn("Email notification is not supported yet.");
+
         break;
       default:
         console.error(`[-] Unsupported notification medium: ${medium}`);

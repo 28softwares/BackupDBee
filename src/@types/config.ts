@@ -9,7 +9,7 @@ export interface General {
 export interface Notifications {
   email: Email;
   slack: Slack;
-  webhook: Webhook;
+  custom: Custom;
   discord: Discord;
   telegram: Telegram;
 }
@@ -25,9 +25,9 @@ export interface Slack {
   webhook_url: string;
 }
 
-export interface Webhook {
+export interface Custom {
   enabled: boolean;
-  url: string;
+  webhook_url: string;
 }
 
 export interface Discord {
