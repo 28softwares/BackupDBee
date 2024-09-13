@@ -13,9 +13,7 @@ export class LocalSender implements Sender {
   validate(): void {
     const backupDir = path.resolve(this.filePath);
     this.backupDir = backupDir;
-    console.log("backupDir", backupDir);
     ensureDirectory(backupDir);
-    console.log("validate local");
   }
 
   async send(): Promise<void> {
