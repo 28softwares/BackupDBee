@@ -29,7 +29,7 @@ export class DiscordNotifier implements Notifier {
           "Content-Type": "application/json",
         },
         body: JSON.stringify({
-          text: this.message,
+          content: this.message,
         }),
       });
 
