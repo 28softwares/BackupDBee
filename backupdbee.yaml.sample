@@ -42,6 +42,11 @@ notifications:
   discord:
     enabled: false
     webhook_url: https://discord.com/api/webhooks/XXXXXXXXX/XXXXXXXXX
+  
+  telegram:
+    enabled: true
+    webhook_url: https://api.telegram.org/botXXXXXXXXXX:XXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXX/sendMessage
+    chatId: XXXXXXX
 
 databases:
   - name: primary_db

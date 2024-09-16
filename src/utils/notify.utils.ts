@@ -6,6 +6,7 @@ import { SlackNotifier } from "../notifiers/slack_notifier";
 import { DiscordNotifier } from "../notifiers/discord_notifier";
 import { Notifications } from "../@types/config";
 import { NOTIFICATION } from "../constants/notifications";
+import { TelegramNotifier } from "../notifiers/telegram_notifier";
 
 export const sendNotification = async (
   dumpInfo: DumpInfo,
@@ -25,27 +26,28 @@ export const sendNotification = async (
         notifiers.push(
           new SlackNotifier(notifications.slack.webhook_url, message)
         );
-
         break;
       case NOTIFICATION.DISCORD:
         notifiers.push(
           new DiscordNotifier(notifications.discord.webhook_url, message)
         );
-
         break;
       case NOTIFICATION.CUSTOM:
         notifiers.push(
           new CustomNotifier(notifications.custom.webhook_url, message)
         );
-
         break;
       case NOTIFICATION.TELEGRAM:
-        Log.warn("Telegram notification is not supported yet.");
-
+        notifiers.push(
+          new TelegramNotifier(
+            notifications.telegram.webhook_url,
+            message,
+            notifications.telegram.chatId
+          )
+        );
         break;
       case NOTIFICATION.EMAIL:
         Log.warn("Email notification is not supported yet.");
-
         break;
       default:
         console.error(`[-] Unsupported notification medium: ${medium}`);

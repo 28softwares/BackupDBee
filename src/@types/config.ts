@@ -37,8 +37,8 @@ export interface Discord {
 
 export interface Telegram {
   enabled: boolean;
-  web_hook: string;
-  web_hook_secret: string;
+  webhook_url: string;
+  chatId: number;
 }
 
 export interface Database {

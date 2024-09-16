@@ -152,8 +152,8 @@ export function setupNotifications(
   if (dataBeeConfig?.notifications?.telegram?.enabled) {
     if (
       validateTelegramNotification(
-        dataBeeConfig?.notifications?.telegram.web_hook,
-        dataBeeConfig?.notifications?.telegram.web_hook_secret
+        dataBeeConfig?.notifications?.telegram.webhook_url,
+        dataBeeConfig?.notifications?.telegram.chatId
       )
     ) {
       notifications.telegram = dataBeeConfig?.notifications?.telegram;
