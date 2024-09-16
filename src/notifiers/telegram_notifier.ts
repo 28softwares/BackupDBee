@@ -1,19 +1,24 @@
-import Log from "../constants/Log";
+import Log from "../constants/log";
+import { Notifier } from "./notifier";
 
-export abstract class Notifier {
-  protected webhookUrl: string;
-  protected message: string;
+export class TelegramNotifier implements Notifier {
+  private webhookUrl: string;
+  private message: string;
+  private chatId: number;
 
-  constructor(webhookUrl: string, message: string) {
+  constructor(webhookUrl: string, message: string, chatId: number) {
     this.webhookUrl = webhookUrl;
     this.message = message;
+    this.chatId = chatId;
   }
-
-  abstract sendNotification(): void;
 
   validate(): void {
     if (!this.webhookUrl) {
       throw new Error("[-] Webhook URL is not set");
+    }
+
+    if (!this.chatId) {
+      throw new Error("[-] Chat Id is not set");
     }
 
     const newUrl = new URL(this.webhookUrl);
@@ -31,6 +36,7 @@ export abstract class Notifier {
         },
         body: JSON.stringify({
           text: this.message,
+          chat_id: this.chatId,
         }),
       });
 
@@ -49,15 +55,14 @@ export abstract class Notifier {
           ).hostname.replace(".com", "")}`
         );
       }
-    } catch (error) {
-      Log.error(`Error sending notification: ${error}`);
-      console.error(`[-] Error sending notification: ${error}`);
+    } catch (error: unknown) {
+      if (error instanceof Error) {
+        Log.error(`Error sending notification: ${error.message}`);
+        console.error(`[-] Error sending notification: ${error.message}`);
+      } else {
+        Log.error(`Unknown error occurred.`);
+        console.error(`[-] Unknown error occurred.`);
+      }
     }
   }
-}
-
-export interface NotifierOption {
-  databaseName: string;
-  databaseDumpFile?: string;
-  databaseDumpPath?: string;
 }

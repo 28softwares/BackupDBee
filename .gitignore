@@ -11,4 +11,7 @@ backups/
 .zip
 .vscode/
 limited_dump.sql
+tmp/
 config.ts
+backupdbee.yaml
+backupdbee.yml

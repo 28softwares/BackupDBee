@@ -3,12 +3,13 @@ import { ChildProcessWithoutNullStreams } from "child_process";
 export type NotifyOnMedium = "SLACK" | "DISCORD" | "CUSTOM";
 
 export type ConfigType = {
-  host?: string;
-  db_name?: string;
-  user?: string;
-  password?: string;
+  name: string;
+  host: string;
+  db_name: string;
+  user: string;
+  password: string;
   type: "postgres" | "mysql";
-  port?: number;
+  port: number;
 };
 
 export interface DumpType {
