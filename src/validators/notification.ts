@@ -25,13 +25,16 @@ export function validateWebhookNotification(url: string): boolean {
   return true;
 }
 
-export function validateTelegramNotification(webHook: string, webHookSecret: string): boolean {
+export function validateTelegramNotification(
+  webHook: string,
+  chatId: number
+): boolean {
   if (!webHook) {
     Log.error("Telegram webhook URL not set in the config file.");
     return false;
   }
-  if (!webHookSecret) {
-    Log.error("Telegram webhook secret not set in the config file.");
+  if (!chatId) {
+    Log.error("chatId not set in the config file.");
     return false;
   }
   return true;
