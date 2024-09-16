@@ -15,7 +15,7 @@ program
   .description(
     "Check required commands, create .env file and install dependencies"
   )
-  .action(install);
+  .action(async () => await install());
 
 program
   .command("update-backup-destination")
