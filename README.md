@@ -16,7 +16,7 @@ Effortlessly manage your database backups at one go. This easy-to-use tool suppo
 
 ## Documentation
 
-Check out the documentation at: (https://github.com/28softwares/backupdbee/tree/main/docs/guide/getting-started)
+Check out the documentation at: [https://28softwares.github.com/BackupDBee](https://28softwares.github.com/BackupDBee)
 
 ## Feel Free To Contribute 👌
 
