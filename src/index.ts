@@ -18,7 +18,7 @@ import {
 // Promisify exec to use with async/await
 export const execAsync = promisify(exec);
 
-const main = async (
+export const main = async (
   configs: ConfigType[],
   destinations: Destinations,
   notifications: Notifications

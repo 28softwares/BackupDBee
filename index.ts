@@ -1,13 +1,10 @@
 import process from "process";
 import { Command } from "commander";
 import install from "./src/commands/install";
-import backUpDest from "./src/commands/backUpDest";
-import updateHelper from "./src/commands/updateHelper";
-import notificationDest from "./src/commands/notificationDest";
-import { dbList } from "./src/commands/database";
+import { dbBackup, dbList } from "./src/commands/database";
 
 const program = new Command();
-program.version("1.0.0").description("AutoBackup DB CLI");
+program.version("1.0.0").description("BackupDBee CLI");
 
 program
   .command("install")
@@ -23,19 +20,11 @@ program
   .action(dbList);
 
 program
-  .command("update-backup-destination")
-  .alias("ubd")
-  .description("Update backup destinations")
-  .action(
-    async () => await updateHelper("Update backup destinations", backUpDest)
-  );
-
-program
-  .command("update-notification")
-  .alias("un")
-  .description("Update notification")
-  .action(
-    async () => await updateHelper("Update notification", notificationDest)
-  );
+  .command("db:backup")
+  .description("Backup all databases or a specific one with --name flag")
+  .option("--name <dbName>", "Name of the database to backup")
+  .action((options: { name?: string }) => {
+    dbBackup(options);
+  });
 
 program.parse(process.argv);

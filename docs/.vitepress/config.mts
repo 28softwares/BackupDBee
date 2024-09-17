@@ -38,7 +38,7 @@ function sidebarGuide(): DefaultTheme.SidebarItem[] {
     {
       text: "Cli Commands",
       collapsed: false,
-      items: [{ text: "db:list", link: "markdown" }],
+      items: [{ text: "db:list", link: "cli/db-list" }],
     },
   ];
 }
