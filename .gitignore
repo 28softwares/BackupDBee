@@ -1,7 +1,6 @@
 node_modules
 log
 .sql
-pnpm-lock.yaml
 yarn.lock
 package-lock.json
 .env
