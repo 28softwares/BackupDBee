@@ -4,17 +4,17 @@ import {
   PutObjectCommand,
   PutObjectCommandInput,
 } from "@aws-sdk/client-s3";
-import EnvConfig from "../constants/env.config";
+import { config } from "../utils/cli.utils";
 
 export class S3Sender implements Sender {
   private static s3ClientInstance: S3Client | null = null;
   private static getS3ClientInstance(): S3Client {
     if (!S3Sender.s3ClientInstance) {
       S3Sender.s3ClientInstance = new S3Client({
-        region: EnvConfig.AWS_REGION,
+        region: config.destinations.s3_bucket.region,
         credentials: {
-          accessKeyId: EnvConfig.AWS_ACCESS_KEY_ID,
-          secretAccessKey: EnvConfig.AWS_SECRET_ACCESS_KEY,
+          accessKeyId: config.destinations.s3_bucket.access_key,
+          secretAccessKey: config.destinations.s3_bucket.secret_key,
         },
       });
     }
@@ -37,7 +37,7 @@ export class S3Sender implements Sender {
   async uploadToS3(fileName?: string, fileContent?: unknown) {
     try {
       const uploadParams = {
-        Bucket: EnvConfig.AWS_S3_BUCKET_NAME,
+        Bucket: config.destinations.s3_bucket.bucket_name,
         Key: fileName,
         Body: fileContent,
         ContentType: "application/octet-stream",

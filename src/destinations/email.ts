@@ -1,20 +1,20 @@
 import { createTransport } from "nodemailer";
-import EnvConfig from "../constants/env.config";
 import Log from "../constants/log";
 import { Sender, SenderOption } from "./sender";
 import Mail from "nodemailer/lib/mailer";
+import { config } from "../utils/cli.utils";
 
 export class EmailSender implements Sender {
   private static transporterInstance: Mail | null = null;
   private static getTransporter(): Mail {
     if (!EmailSender.transporterInstance) {
       EmailSender.transporterInstance = createTransport({
-        host: "smtp.gmail.com",
+        host: config.destinations.email.smtp_server,
         secure: true,
         requireTLS: true,
         auth: {
-          user: EnvConfig.MAIL_USER,
-          pass: EnvConfig.MAIL_PASSWORD,
+          user: config.destinations.email.smtp_username,
+          pass: config.destinations.email.smtp_password,
         },
       });
     }
@@ -42,7 +42,10 @@ export class EmailSender implements Sender {
       throw new Error("[-] Email address is invalid.");
     }
 
-    if (!EnvConfig.MAIL_USER || !EnvConfig.MAIL_PASSWORD) {
+    if (
+      !config.destinations.email.smtp_username ||
+      !config.destinations.email.smtp_password
+    ) {
       throw new Error("[-] MAIL_USER or MAIL_PASSWORD is not set");
     }
     const transporter = EmailSender.getTransporter();

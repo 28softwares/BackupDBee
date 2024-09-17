@@ -1,11 +1,9 @@
 export const NOTIFICATION = {
-  EMAIL: "EMAIL",
   SLACK: "SLACK",
   CUSTOM: "CUSTOM",
   DISCORD: "DISCORD",
   TELEGRAM: "TELEGRAM",
 };
-
 
 export const DESTINATION = {
   EMAIL: "EMAIL",

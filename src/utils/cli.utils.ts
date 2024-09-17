@@ -18,3 +18,5 @@ export function saveConfig(config: DataBeeConfig) {
   const yamlString = yaml.stringify(config);
   writeFileSync(destinationFile, yamlString, "utf8");
 }
+
+export const config = parseConfigFile();

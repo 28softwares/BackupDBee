@@ -4,13 +4,12 @@ import { spinner } from "@clack/prompts";
 import { setupDBConfig, setupDestinations, setupNotifications } from "../setup";
 import process from "process";
 import { main } from "..";
-import { parseConfigFile } from "../utils/cli.utils";
+import { config } from "../utils/cli.utils";
 
 /**
  * Retrieves the list of databases from the configuration and logs them to the console.
  */
 export const dbList = () => {
-  const config = parseConfigFile();
   console.log("Database List");
   const databases = config.databases;
   if (databases && databases.length > 0) {
@@ -52,7 +51,6 @@ const setupMainFunction = async (config: DataBeeConfig) => {
  * @throws {Error} If the backup fails.
  */
 export const dbBackup = async (options: { name?: string }) => {
-  const config = parseConfigFile();
   const databases = config.databases;
 
   try {

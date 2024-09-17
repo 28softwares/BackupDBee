@@ -1,6 +1,6 @@
 import { Email } from "../@types/config";
-import EnvConfig from "../constants/env.config";
 import Log from "../constants/log";
+import { config } from "../utils/cli.utils";
 
 export function validateEmailDestination(email?: Email): boolean {
   if (email?.enabled) {
@@ -14,14 +14,16 @@ export function validateEmailDestination(email?: Email): boolean {
       return false;
     }
 
-    if (!EnvConfig.MAIL_USER || !EnvConfig.MAIL_PASSWORD) {
+    if (
+      !config.destinations.email.smtp_username ||
+      !config.destinations.email.smtp_password
+    ) {
       Log.error("Mail credentials not set in the environment variables.");
       return false;
     }
   }
   return true;
 }
-
 
 export function validateEmailNotification(email: Email): boolean {
   if (!email.from) {

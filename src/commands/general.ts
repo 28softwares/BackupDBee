@@ -1,6 +1,6 @@
 import { select, text } from "@clack/prompts";
 import { promptWithCancel } from "./promptWithCancel";
-import { parseConfigFile, saveConfig } from "../utils/cli.utils";
+import { config, saveConfig } from "../utils/cli.utils";
 
 const general = async (options: {
   backupLocation?: string;
@@ -9,19 +9,18 @@ const general = async (options: {
   retentionPolicy?: string;
   backupSchedule?: string;
 }) => {
-  const config = parseConfigFile();
   if (!Object.keys(options).length) {
     const backupLocation = await promptWithCancel(text, {
       message: "Enter backup location",
       initialValue: config.general.backup_location,
     });
 
-    const logLocation = await text({
+    const logLocation = await promptWithCancel(text, {
       message: "Enter log location",
       initialValue: config.general.log_location,
     });
 
-    const logLevel = await select({
+    const logLevel = await promptWithCancel(select, {
       message: "Select log level",
       options: [
         { value: "INFO", label: "INFO" },
@@ -31,12 +30,12 @@ const general = async (options: {
       initialValue: config.general.log_level,
     });
 
-    const retentionPolicy = (await text({
+    const retentionPolicy = (await promptWithCancel(text, {
       message: "Enter retention policy (days)",
       initialValue: String(config.general.retention_policy_days),
     })) as unknown as number;
 
-    const backupSchedule = await text({
+    const backupSchedule = await promptWithCancel(text, {
       message: "Enter backup schedule (cron format)",
       initialValue: config.general.backup_schedule,
     });
