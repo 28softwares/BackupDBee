@@ -2,6 +2,7 @@ import { defineConfig, type DefaultTheme } from "vitepress";
 
 // https://vitepress.dev/reference/site-config
 export default defineConfig({
+  base: "/backupdbee/",
   title: "BackupDBee 🐝",
   description: "Automatic CLI Based Advance DB Backup System",
   themeConfig: {
