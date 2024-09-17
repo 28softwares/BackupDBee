@@ -4,7 +4,7 @@ import install from "./src/commands/install";
 import backUpDest from "./src/commands/backUpDest";
 import updateHelper from "./src/commands/updateHelper";
 import notificationDest from "./src/commands/notificationDest";
-import database from "./src/commands/database";
+import { dbList } from "./src/commands/database";
 
 const program = new Command();
 program.version("1.0.0").description("AutoBackup DB CLI");
@@ -16,6 +16,11 @@ program
     "Check required commands, create .env file and install dependencies"
   )
   .action(async () => await install());
+
+program
+  .command("db:list")
+  .description("List all databases and show the total count")
+  .action(dbList);
 
 program
   .command("update-backup-destination")
@@ -32,11 +37,5 @@ program
   .action(
     async () => await updateHelper("Update notification", notificationDest)
   );
-
-program
-  .command("add-database")
-  .alias("ad")
-  .description("Add database")
-  .action(async () => await updateHelper("Add database", database));
 
 program.parse(process.argv);

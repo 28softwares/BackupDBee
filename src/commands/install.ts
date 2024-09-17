@@ -2,8 +2,8 @@ import { intro, confirm, spinner } from "@clack/prompts";
 import * as fs from "fs";
 import process from "process";
 import chalk from "chalk";
-import path from "path";
 import { checkCommands } from "./commandChecker";
+import { destinationFile, sourceFile } from "./utils";
 
 function centerText(text: string) {
   const terminalWidth = process.stdout.columns;
@@ -21,11 +21,6 @@ function centerMultilineText(text: string) {
 }
 
 const createBackupdbeeYaml = () => {
-  // eslint-disable-next-line no-undef
-  const sourceFile = path.join(__dirname, "../../backupdbee.yaml.sample");
-  // eslint-disable-next-line no-undef
-  const destinationFile = path.join(__dirname, "../../backupdbee.yaml");
-
   const s = spinner();
   s.start("Creating backupdbee.yaml file");
 
