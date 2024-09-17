@@ -1,6 +1,6 @@
 import { Database, DataBeeConfig } from "../@types/config";
 import chalk from "chalk";
-import { intro, outro } from "@clack/prompts";
+import { spinner } from "@clack/prompts";
 import { setupDBConfig, setupDestinations, setupNotifications } from "../setup";
 import process from "process";
 import { main } from "..";
@@ -62,19 +62,23 @@ export const dbBackup = async (options: { name?: string }) => {
       // update config with the specific database
       if (db) {
         config.databases = [db];
-        intro(chalk.blueBright(`Backing up database: ${options.name}`));
+        const s = spinner();
+        s.start(`Backing up database: ${options.name}\n`);
         await setupMainFunction(config); // Call main function to backup specific database
+        s.stop();
       } else {
         console.log(chalk.red(`Database "${options.name}" not found.`));
         process.exit(1);
       }
     } else {
       // Backup all databases
-      intro(chalk.blueBright("Backing up all databases..."));
+      const s = spinner();
+      s.start("Backing up all databases\n");
       await setupMainFunction(config); // Call main function to backup all databases
+      s.stop();
     }
   } catch (e) {
     console.log(e);
-    outro(chalk.red("Backup failed."));
+    console.log(chalk.red("Backup failed."));
   }
 };

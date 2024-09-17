@@ -5,16 +5,22 @@
 ### Prerequisites
 
 - [Node.js](https://nodejs.org/) version 18 or higher.
-- Terminal for accessing VitePress via its command line interface (CLI).
+- Terminal for accessing BackupDBee cli via its command line interface (CLI).
 - [zip]
 - [pg_dump]
 - [mysqldump]
 
-## Clone the project 📦
+### Clone the project 📦
 
 ```
 git clone https://github.com/28softwares/backupdbee.git
 cd backupdbee
+```
+
+### Install Required Dependencies
+
+```bash
+pnpm install
 ```
 
 ### Initial Setup

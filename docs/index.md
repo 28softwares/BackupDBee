@@ -3,7 +3,7 @@
 layout: home
 
 hero:
-  name: "BackupDBee"
+  name: "BackupDBee 🐝"
   text: "Automatic CLI Based Advance DB Backup System"
   tagline: My great project tagline
   actions:
@@ -22,4 +22,3 @@ features:
   - title: Feature C
     details: Lorem ipsum dolor sit amet, consectetur adipiscing elit
 ---
-

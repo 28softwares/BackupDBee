@@ -54,7 +54,7 @@ const install = async (): Promise<void> => {
       createBackupdbeeYaml();
     } else {
       const shouldContinue = await confirm({
-        message: "Do you want to continue?",
+        message: "Backupdbee.yaml file exits. Do you want to override?",
         initialValue: false,
       });
       if (!shouldContinue) {
@@ -63,6 +63,12 @@ const install = async (): Promise<void> => {
         createBackupdbeeYaml();
       }
     }
+
+    console.log(
+      chalk.green(
+        "Next Step: Update the backupdbee.yaml file with your configurations."
+      )
+    );
   } catch (err) {
     console.log(err);
   }

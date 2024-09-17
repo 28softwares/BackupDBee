@@ -9,9 +9,7 @@ program.version("1.0.0").description("BackupDBee CLI");
 program
   .command("install")
   .alias("i")
-  .description(
-    "Check required commands, create .env file and install dependencies"
-  )
+  .description("Check required commands, create backupdbee.yaml file")
   .action(async () => await install());
 
 program
