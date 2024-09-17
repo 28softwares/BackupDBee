@@ -2,7 +2,7 @@ import { defineConfig, type DefaultTheme } from "vitepress";
 
 // https://vitepress.dev/reference/site-config
 export default defineConfig({
-  title: "BackupDBee",
+  title: "BackupDBee 🐝",
   description: "Automatic CLI Based Advance DB Backup System",
   themeConfig: {
     // https://vitepress.dev/reference/default-theme-config
@@ -39,9 +39,14 @@ function sidebarGuide(): DefaultTheme.SidebarItem[] {
       text: "Cli Commands",
       collapsed: false,
       items: [
+        { text: "general", link: "cli/general" },
         { text: "db:list", link: "cli/db-list" },
         { text: "db:backup", link: "cli/db-backup" },
       ],
+    },
+    {
+      text: "Automation",
+      link: "automate-backup",
     },
   ];
 }

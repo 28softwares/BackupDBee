@@ -1,4 +1,4 @@
-# List Databases Command
+# `db:list` Command Documentation
 
 The `db:list` command lists all the databases defined in the YAML configuration file and shows the total count of databases.
 

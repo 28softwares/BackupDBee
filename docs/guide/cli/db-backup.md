@@ -1,4 +1,4 @@
-# Backup Databases Command
+# `db:backup` Command Documentation
 
 The `db:backup` command is used to back up all databases defined in the YAML configuration, or a specific one using the `--name` flag.
 
