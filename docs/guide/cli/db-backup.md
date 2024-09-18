@@ -1,6 +1,6 @@
 # `db:backup` Command Documentation
 
-The `db:backup` command is used to back up all databases defined in the YAML configuration, or a specific one using the `--name` flag.
+The `db:backup` command is used to back up all databases defined in the YAML configuration or specific ones using the `--name` flag. You can pass multiple databases to `--name` flag by providing a comma-separated list of database names.
 
 ## Usage
 
@@ -12,10 +12,18 @@ To back up all databases, simply run the following command:
 ts-node index.ts db:backup
 ```
 
-### Backup Specific Database
+### Backup Specific Database(s)
 
-To back up a specific database, use the `--name` flag followed by the name of the database. For example:
+To back up one or more specific databases, use the `--name` flag followed by the database name(s). You can provide a single database name or multiple names separated by commas.
+
+#### Backup a Single Database:
 
 ```bash
 node index.ts db:backup --name <database_name>
+```
+
+#### Backup Multiple Databases:
+
+```bash
+ts-node index.ts db:backup --name <database_name_1>,<database_name_2>,<database_name_3>
 ```

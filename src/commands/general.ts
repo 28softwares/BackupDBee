@@ -6,7 +6,7 @@ const general = async (options: {
   backupLocation?: string;
   logLocation?: string;
   logLevel?: string;
-  retentionPolicy?: string;
+  retentionPolicy?: number;
   backupSchedule?: string;
 }) => {
   if (!Object.keys(options).length) {
@@ -30,10 +30,12 @@ const general = async (options: {
       initialValue: config.general.log_level,
     });
 
-    const retentionPolicy = (await promptWithCancel(text, {
-      message: "Enter retention policy (days)",
-      initialValue: String(config.general.retention_policy_days),
-    })) as unknown as number;
+    const retentionPolicy = Number(
+      await promptWithCancel(text, {
+        message: "Enter retention policy (days)",
+        initialValue: String(config.general.retention_policy_days),
+      })
+    );
 
     const backupSchedule = await promptWithCancel(text, {
       message: "Enter backup schedule (cron format)",
@@ -43,7 +45,7 @@ const general = async (options: {
     config.general.backup_location = backupLocation as string;
     config.general.log_location = logLocation as string;
     config.general.log_level = logLevel as string;
-    config.general.retention_policy_days = Number(retentionPolicy);
+    config.general.retention_policy_days = retentionPolicy;
     config.general.backup_schedule = backupSchedule as string;
   } else {
     // If flags are provided, use them to update the config directly
@@ -52,7 +54,7 @@ const general = async (options: {
     if (options.logLocation) config.general.log_location = options.logLocation;
     if (options.logLevel) config.general.log_level = options.logLevel;
     if (options.retentionPolicy)
-      config.general.retention_policy_days = Number(options.retentionPolicy);
+      config.general.retention_policy_days = options.retentionPolicy;
     if (options.backupSchedule)
       config.general.backup_schedule = options.backupSchedule;
   }

@@ -39,33 +39,59 @@ const setupMainFunction = async (config: DataBeeConfig) => {
 };
 
 /**
- * Performs a database backup.
+ * Backs up databases based on the provided options.
  *
- * @param options - An optional object containing the name of the specific database to backup.
- * @param options.name - The name of the specific database to backup.
+ * @param options - An object containing optional parameters.
+ * @param options.name - A comma-separated string of database names to back up. If not provided, all databases will be backed up.
  *
- * @remarks
- * If the `options.name` parameter is provided, the function will backup only the specified database.
- * If the `options.name` parameter is not provided, the function will backup all databases.
+ * The function performs the following steps:
+ * 1. If `options.name` is provided, it splits the name by commas to handle multiple databases.
+ * 2. It filters the databases to find those that match any of the provided names.
+ * 3. If matching databases are found, it updates the configuration to include only the selected databases and starts the backup process.
+ * 4. If no matching databases are found, it logs an error message and exits the process.
+ * 5. If `options.name` is not provided, it backs up all databases.
+ * 6. In case of any errors during the backup process, it logs the error and a failure message.
  *
- * @throws {Error} If the backup fails.
+ * @throws Will log an error and exit the process if no matching databases are found.
+ * @throws Will log an error message if the backup process fails.
  */
 export const dbBackup = async (options: { name?: string }) => {
   const databases = config.databases;
 
   try {
     if (options.name) {
-      // select specific database
-      const db = databases.find((db: Database) => db.name === options.name);
-      // update config with the specific database
-      if (db) {
-        config.databases = [db];
+      // Split the name by commas to handle multiple databases
+      const dbNames = options.name.split(",").map((name) => name.trim());
+
+      // Find the databases that match any of the names
+      const selectedDatabases = databases.filter((db: Database) =>
+        dbNames.includes(db.name)
+      );
+      // Extracting the names of the selected databases and not found databases from dbNames
+      const selectedDatabaseNames = selectedDatabases.map(
+        (db: Database) => db.name
+      );
+      const notFoundDatabases = dbNames.filter(
+        (name) => !selectedDatabaseNames.includes(name)
+      );
+
+      if (selectedDatabases.length) {
+        config.databases = selectedDatabases;
         const s = spinner();
-        s.start(`Backing up database: ${options.name}`);
-        await setupMainFunction(config); // Call main function to backup specific database
+        if (notFoundDatabases.length) {
+          console.log(
+            chalk.yellow(
+              `No matching databases found for: ${notFoundDatabases.join(", ")}`
+            )
+          );
+        }
+        s.start(`Backing up databases: ${selectedDatabaseNames.join(", ")}`);
+        await setupMainFunction(config); // Call main function to backup selected databases
         s.stop();
       } else {
-        console.log(chalk.red(`Database "${options.name}" not found.`));
+        console.log(
+          chalk.red(`No matching databases found for: ${dbNames.join(", ")}`)
+        );
         process.exit(1);
       }
     } else {
