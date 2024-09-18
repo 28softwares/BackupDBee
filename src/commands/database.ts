@@ -61,7 +61,7 @@ export const dbBackup = async (options: { name?: string }) => {
       if (db) {
         config.databases = [db];
         const s = spinner();
-        s.start(`Backing up database: ${options.name}\n`);
+        s.start(`Backing up database: ${options.name}`);
         await setupMainFunction(config); // Call main function to backup specific database
         s.stop();
       } else {
@@ -71,7 +71,7 @@ export const dbBackup = async (options: { name?: string }) => {
     } else {
       // Backup all databases
       const s = spinner();
-      s.start("Backing up all databases\n");
+      s.start("Backing up all databases");
       await setupMainFunction(config); // Call main function to backup all databases
       s.stop();
     }
