@@ -1,4 +1,4 @@
-import { intro, confirm, spinner } from "@clack/prompts";
+import { confirm } from "@clack/prompts";
 import * as fs from "fs";
 import process from "process";
 import chalk from "chalk";
@@ -16,9 +16,6 @@ import { destinationFile, sourceFile } from "../utils/cli.utils";
  * @param destinationFile - The path to the destination file.
  */
 const createBackupdbeeYaml = () => {
-  const s = spinner();
-  s.start("Creating backupdbee.yaml file");
-
   fs.readFile(sourceFile, "utf8", (err, data) => {
     if (err) {
       console.error("Error reading the source file:", err);
@@ -28,10 +25,10 @@ const createBackupdbeeYaml = () => {
     // Write the content to the destination file
     fs.writeFile(destinationFile, data, (err) => {
       if (err) {
-        s.stop(`Error writing to the destination file: ${err}`);
+        console.log(chalk.red(`Error writing to the destination file: ${err}`));
         process.exit(0);
       } else {
-        s.stop(`File copied successfully to ${destinationFile}`);
+        console.log(`\nFile copied successfully to ${destinationFile}`);
       }
     });
   });
@@ -47,7 +44,6 @@ const install = async (): Promise<void> => {
   checkCommands(commands);
   console.log();
 
-  intro(chalk.inverse("Installation"));
   try {
     // check if backupdbee.yaml file exists in root folder or not
     if (!fs.existsSync("backupdbee.yaml")) {
@@ -65,9 +61,7 @@ const install = async (): Promise<void> => {
     }
 
     console.log(
-      chalk.green(
-        "Next Step: Update the backupdbee.yaml file with your configurations."
-      )
+      "\nNext Step: Update the backupdbee.yaml file with your configurations."
     );
   } catch (err) {
     console.log(err);
