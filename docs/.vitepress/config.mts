@@ -34,6 +34,7 @@ function sidebarGuide(): DefaultTheme.SidebarItem[] {
       items: [
         { text: "What is backupdbee?", link: "what-is-backupdbee" },
         { text: "Getting Started", link: "getting-started" },
+        { text: "Configuration", link: "configuration" },
       ],
     },
     {

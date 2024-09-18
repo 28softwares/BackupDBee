@@ -19,7 +19,7 @@ To back up one or more specific databases, use the `--name` flag followed by the
 #### Backup a Single Database:
 
 ```bash
-node index.ts db:backup --name <database_name>
+ts-node index.ts db:backup --name <database_name>
 ```
 
 #### Backup Multiple Databases:
