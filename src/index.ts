@@ -1,4 +1,3 @@
-import "dotenv/config";
 import backupHelper from "./utils/backup.utils";
 import { exec } from "child_process";
 import { ConfigType } from "./@types/types";
