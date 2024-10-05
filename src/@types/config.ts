@@ -14,12 +14,6 @@ export interface Notifications {
   telegram: Telegram;
 }
 
-export interface Email {
-  enabled: boolean;
-  from: string;
-  to: string[];
-}
-
 export interface Slack {
   enabled: boolean;
   webhook_url: string;
@@ -59,8 +53,20 @@ export interface Local {
 
 export interface S3Bucket {
   enabled: boolean;
-  bucket: string;
+  bucket_name: string;
   region: string;
+  access_key: string;
+  secret_key: string;
+}
+
+export interface Email {
+  enabled: boolean;
+  smtp_server: string;
+  smtp_port: number;
+  smtp_username: string;
+  smtp_password: string;
+  from: string;
+  to: string[];
 }
 
 export interface Destinations {

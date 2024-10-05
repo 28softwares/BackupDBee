@@ -14,38 +14,9 @@ Effortlessly manage your database backups at one go. This easy-to-use tool suppo
 
 ✅ Automated Backups: Schedule and automate backups (using crons or pm2) to ensure your data is always protected without manual intervention.
 
-## Clone the project 📦
+## Documentation
 
-```
-git clone https://github.com/28softwares/backupdbee.git
-cd backupdbee
-```
-
-### Initial Setup
-
-Make sure to install nodejs and zip in the linux server.
-
-```bash
-node index.mjs install #this creates .env file
-```
-
-### Configurations ⚒️
-
-For GMAIL, you need to enable less secure apps in your gmail account. [Click here to enable less secure apps](https://myaccount.google.com/lesssecureapps)
-
-```bash
-crontab -e
-
-#at the crontab file, add the following script.
-#minute hour dayOfMonth month dayOfWeek commandToRun
-* * * * * commandToRun {_ can be any value}~~
-```
-
-_OR, you can use process managers as_
-
-```
-pm2 start src/index.mjs --name dbbackup --cron "* * * * *"
-```
+Check out the documentation at: [https://28softwares.github.com/BackupDBee](https://28softwares.github.com/BackupDBee)
 
 ## Feel Free To Contribute 👌
 

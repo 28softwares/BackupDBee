@@ -46,9 +46,6 @@ export const sendNotification = async (
           )
         );
         break;
-      case NOTIFICATION.EMAIL:
-        Log.warn("Email notification is not supported yet.");
-        break;
       default:
         console.error(`[-] Unsupported notification medium: ${medium}`);
         Log.error(`Unsupported notification medium: ${medium}`);

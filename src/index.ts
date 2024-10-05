@@ -1,24 +1,16 @@
-import "dotenv/config";
 import backupHelper from "./utils/backup.utils";
 import { exec } from "child_process";
 import { ConfigType } from "./@types/types";
 import { promisify } from "util";
 import Log from "./constants/log";
 import { sendNotification } from "./utils/notify.utils";
-import { readFileSync } from "fs";
-import * as yaml from "yaml";
-import { DataBeeConfig, Destinations, Notifications } from "./@types/config";
+import { Destinations, Notifications } from "./@types/config";
 import { validateDBConfig } from "./validators/config";
-import {
-  getDefaultPortOfDBType,
-  setupDBConfig,
-  setupDestinations,
-  setupNotifications,
-} from "./setup";
+import { getDefaultPortOfDBType } from "./setup";
 // Promisify exec to use with async/await
 export const execAsync = promisify(exec);
 
-const main = async (
+export const main = async (
   configs: ConfigType[],
   destinations: Destinations,
   notifications: Notifications
@@ -46,16 +38,3 @@ const main = async (
     }
   }
 };
-
-function parseConfigFile(path: string = "backupdbee.yaml"): DataBeeConfig {
-  const configFile = readFileSync(path, "utf-8");
-  const yamlConfig = yaml.parse(configFile) as DataBeeConfig;
-  return yamlConfig;
-}
-
-const dataBeeConfig = parseConfigFile();
-main(
-  setupDBConfig(dataBeeConfig),
-  setupDestinations(dataBeeConfig),
-  setupNotifications(dataBeeConfig)
-);

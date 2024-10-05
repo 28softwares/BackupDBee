@@ -23,14 +23,11 @@ destinations:
     smtp_port: 587
     smtp_username:
     smtp_password:
-
-notifications:
-  email:
-    enabled: false
     from: no-reply@backupbee.com
     to:
       - master@backupbee.com
 
+notifications:
   slack:
     enabled: true
     webhook_url: https://hooks.slack.com/services/XXXXXXXXXXXXXXXXXXXXXXXX
